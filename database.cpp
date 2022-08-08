@@ -4,6 +4,7 @@
 #include <QtXml>
 #include <regex>
 #include <iostream>
+#include <exception>
 
 Database::Database(const QString& filename)
 {
