@@ -235,6 +235,16 @@ void ParseFormula(const QString& formula, QString& suffix,
 			// (Co(NH3)6)Br3
 			// (Co(NH3)5Cl)Cl2
 			// K2Sr(B4O5(OH)4)2
+			std::smatch m;
+			if(!std::regex_match(text, m, nested_brackets)) throw std::exception("Error in regex match in nested brackets");
+			auto&& m0 = m[0]; // K2Sr(B4O5(OH)4)2Mo4
+			auto&& m1 = m[1]; // K2Sr
+			auto&& m2 = m[2]; // (B4O5(OH)4)2
+			auto&& m3 = m[3]; // B4O5(OH)4
+			auto&& m4 = m[4]; // 2
+			auto&& m5 = m[5]; // Mo4
+
+
 
 
 
@@ -287,7 +297,7 @@ void tests()
 
 	formulas << Test{"(Co(NH3)6)Br3", "", {{"Co",1},{"N",6},{"H",18},{"Br",3}}};
 	formulas << Test{"(Co(NH3)5Cl)Cl2", "", {{"Co",1},{"N",5},{"H",15},{"Cl",3}}};
-	formulas << Test{"K2Sr(B4O5(OH)4)2*10H2O", "", {{"K",2},{"Sr",1},{"B",8},{"O",28},{"H",28}}};
+	formulas << Test{"K2Sr(B4O5(OH)4)2Mo4*10H2O", "", {{"K",2},{"Sr",1},{"B",8},{"O",28},{"H",28},{"Mo",4}}};
 
 	QString suffix_test;
 	Composition cmp_test;
