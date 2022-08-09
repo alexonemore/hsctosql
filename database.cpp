@@ -226,7 +226,7 @@ void ParseFormula(const QString& formula, QString& suffix,
 	// (Co(NH3)5Cl)Cl2	 => [(Co(NH3)5Cl)Cl2:1 ]
 
 
-	const static std::regex nested_brackets("()");
+	const static std::regex nested_brackets("([A-Za-z0-9\\.]*)(\\(([A-Za-z0-9\\.]*?\\([A-Za-z0-9\\.]*?\\)[A-Za-z0-9\\.]*?)\\)([0-9\\.]*))([A-Za-z0-9\\.]*)");
 	const static std::regex brackets("([\\(]*[A-Za-z0-9\\.]+[\\)]*)([0-9\\.]*)");
 	const static std::regex elements("([A-Z]{1}[a-z]?)([0-9\\.]*)");
 
@@ -235,7 +235,6 @@ void ParseFormula(const QString& formula, QString& suffix,
 			// (Co(NH3)6)Br3
 			// (Co(NH3)5Cl)Cl2
 			// K2Sr(B4O5(OH)4)2
-			std::regex maybe("(\((?:\1??[^\(]*?\)))+");
 
 
 
