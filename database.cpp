@@ -225,10 +225,7 @@ void ParseFormula(const QString& formula, QString& suffix,
 	// Co*6(NH3)*N3(+2a) =>	[Co:1 N3:1 (NH3):6 ]
 	// (Co(NH3)5Cl)Cl2	 => [(Co(NH3)5Cl)Cl2:1 ]
 
-
 	const static std::regex nested_brackets("([A-Za-z0-9\\.]*)(\\(([A-Za-z0-9\\.]*?\\([A-Za-z0-9\\.]*?\\)[A-Za-z0-9\\.]*?)\\)([0-9\\.]*))([A-Za-z0-9\\.]*)");
-	const static std::regex brackets("([\\(]*[A-Za-z0-9\\.]+[\\)]*)([0-9\\.]*)");
-	const static std::regex elements("([A-Z]{1}[a-z]?)([0-9\\.]*)");
 
 	for(auto&& [text, amount1] : asterisk_separated_vec) {
 		if(contain_nested_brackets(text)) {
@@ -237,37 +234,50 @@ void ParseFormula(const QString& formula, QString& suffix,
 			// K2Sr(B4O5(OH)4)2
 			std::smatch m;
 			if(!std::regex_match(text, m, nested_brackets)) throw std::exception("Error in regex match in nested brackets");
-			auto&& m0 = m[0]; // K2Sr(B4O5(OH)4)2Mo4
-			auto&& m1 = m[1]; // K2Sr
-			auto&& m2 = m[2]; // (B4O5(OH)4)2
-			auto&& m3 = m[3]; // B4O5(OH)4
-			auto&& m4 = m[4]; // 2
-			auto&& m5 = m[5]; // Mo4
+			//auto&& m0 = m[0];		// K2Sr(B4O5(OH)4)2Mo4
+			auto&& m1 = m[1].str(); // K2Sr
+			//auto&& m2 = m[2];		// (B4O5(OH)4)2
+			auto&& m3 = m[3].str(); // B4O5(OH)4
+			auto&& m4 = m[4].str(); // 2
+			auto&& m5 = m[5].str(); // Mo4
+			auto amount_koef = m4.empty() ? 1.0 : std::stod(m4);
 
-
-
-
+			if(!m1.empty()) {
+				ParseFormulaWithoutNestedBrackets(composition, m1, amount1);
+			}
+			if(!m3.empty()) {
+				ParseFormulaWithoutNestedBrackets(composition, m3, amount1*amount_koef);
+			}
+			if(!m5.empty()) {
+				ParseFormulaWithoutNestedBrackets(composition, m5, amount1);
+			}
 
 		} else {
 			if(QString(text.c_str()).contains('\'')) throw std::exception("contains \'");
+			ParseFormulaWithoutNestedBrackets(composition, text, amount1);
+		}
+	}
+}
 
-			auto pos2 = std::sregex_iterator(text.begin(), text.end(), brackets);
-			auto end2 = std::sregex_iterator();
-			for(; pos2 != end2; ++pos2) { // K3Sm2(UO2)3.4(MoO4)2
-				auto&& m1 = pos2->str(1); // K3Sm2		(UO2)		(MoO4)
-				auto&& m2 = pos2->str(2); // null		3.4			2
-				auto amount2 = m2.empty() ? 1.0 : std::stod(m2);
-
-				auto pos3 = std::sregex_iterator(m1.begin(), m1.end(), elements);
-				auto end3 = std::sregex_iterator();
-				for(; pos3 != end3; ++pos3) { // (MoO4)
-					auto&& e1 = pos3->str(1); // Mo		O
-					auto&& e2 = pos3->str(2); // null	4
-					auto amount3 = e2.empty() ? 1.0 : std::stod(e2);
-
-					composition[QString(e1.c_str())] += amount3 * amount2 * amount1;
-				}
-			}
+void ParseFormulaWithoutNestedBrackets(Composition& composition,
+								const std::string& text, const double amount1)
+{
+	const static std::regex brackets("([\\(]*[A-Za-z0-9\\.]+[\\)]*)([0-9\\.]*)");
+	const static std::regex elements("([A-Z]{1}[a-z]?)([0-9\\.]*)");
+	auto pos2 = std::sregex_iterator(text.begin(), text.end(), brackets);
+	auto end2 = std::sregex_iterator();
+	for(; pos2 != end2; ++pos2) { // K3Sm2(UO2)3.4(MoO4)2
+		auto&& m1 = pos2->str(1); // K3Sm2		(UO2)		(MoO4)
+		auto&& m2 = pos2->str(2); // null		3.4			2
+		auto amount2 = m2.empty() ? 1.0 : std::stod(m2);
+		auto amount2_multiply_amount1 = amount2 * amount1;
+		auto pos3 = std::sregex_iterator(m1.begin(), m1.end(), elements);
+		auto end3 = std::sregex_iterator();
+		for(; pos3 != end3; ++pos3) { // (MoO4)
+			auto&& e1 = pos3->str(1); // Mo		O
+			auto&& e2 = pos3->str(2); // null	4
+			auto amount3 = e2.empty() ? 1.0 : std::stod(e2);
+			composition[QString(e1.c_str())] += amount3 * amount2_multiply_amount1;
 		}
 	}
 }
@@ -294,6 +304,10 @@ void tests()
 	formulas << Test{"*2K2TaF7*Ta2O5(+a)", "+a", {{"K", 4}, {"Ta", 4}, {"O", 5}, {"F", 14}}};
 	formulas << Test{"K2Zn3(P2O7)2*3H2O(s)", "s", {{"K",2},{"Zn",3},{"P",4},{"O",17},{"H",6}}};
 	formulas << Test{"Ca2Fe0.75Mg0.25B2Si2*O10(-al)", "-al", {{"Ca",2},{"Fe",0.75},{"Mg",0.25},{"B",2},{"Si",2},{"O",10}}};
+
+	formulas << Test{"Co(NH3)5*Cl*Cl2", "", {{"Co",1}, {"N",5}, {"H",15}, {"Cl",3}}};
+	formulas << Test{"Co(NH3)5Cl*Cl2", "", {{"Co",1}, {"N",5}, {"H",15}, {"Cl",3}}};
+	formulas << Test{"Co*5(NH3)*Cl3(ia)", "ia", {{"Co",1}, {"N",5}, {"H",15}, {"Cl",3}}};
 
 	formulas << Test{"(Co(NH3)6)Br3", "", {{"Co",1},{"N",6},{"H",18},{"Br",3}}};
 	formulas << Test{"(Co(NH3)5Cl)Cl2", "", {{"Co",1},{"N",5},{"H",15},{"Cl",3}}};

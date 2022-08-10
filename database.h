@@ -100,6 +100,8 @@ private:
 
 void ParseFormula(const QString& formula, QString& suffix,
 					  Composition& composition);
+void ParseFormulaWithoutNestedBrackets(Composition& composition,
+						const std::string& text, const double amount1);
 void tests();
 
 #endif // DATABASE_H
