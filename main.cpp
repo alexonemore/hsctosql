@@ -11,6 +11,7 @@ int main()
 	try {
 		Database db(dbfilename);
 		db.PrintNames("../names.txt");
+		db.Print("../db.txt");
 	} catch(std::exception& ex) {
 		qDebug() << ex.what();
 	}

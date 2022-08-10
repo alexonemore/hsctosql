@@ -97,57 +97,67 @@ Database::Database(const QString& filename)
 	ParseFormulaToComposition();
 }
 
-void Database::Print() const
+void Database::Print(const QString& filename) const
 {
-	for(auto&& i : db) {
-		qDebug() << "suHSCMP" << i.suHSCMP;
-		qDebug() << "suHSCBP" << i.suHSCBP;
-		qDebug() << "OriginDatabase" << i.OriginDatabase;
-		qDebug() << "SaveDate" << i.SaveDate;
-		qDebug() << "CAN" << i.CAN;
-		qDebug() << "formula" << i.formula;
-		qDebug() << "formulaS" << i.formulaS;
-		qDebug() << "NameCh" << i.NameCh;
-		qDebug() << "NameCo" << i.NameCo;
-		qDebug() << "HSCMP" << i.HSCMP;
-		qDebug() << "HSCBP" << i.HSCBP;
-		qDebug() << "Unit" << i.Unit;
-		qDebug() << "TemperatureUnit" << i.TemperatureUnit;
-		for(auto&& t : i.TempRange) {
-			qDebug() << "\tUnit" << t.Unit;
-			qDebug() << "\tTemperatureUnit" << t.TemperatureUnit;
-			qDebug() << "\tHSCTempIndex" << t.HSCTempIndex;
-			qDebug() << "\tReference" << t.Reference;
-			qDebug() << "\tHSCT1" << t.HSCT1;
-			qDebug() << "\tHSCT2" << t.HSCT2;
-			qDebug() << "\tHSCH" << t.HSCH;
-			qDebug() << "\tHSCS" << t.HSCS;
-			qDebug() << "\tHSCA" << t.HSCA;
-			qDebug() << "\tHSCB" << t.HSCB;
-			qDebug() << "\tHSCC" << t.HSCC;
-			qDebug() << "\tHSCD" << t.HSCD;
-			qDebug() << "\tHSCE" << t.HSCE;
-			qDebug() << "\tHSCF" << t.HSCF;
-			qDebug() << "\tHSCDe" << t.HSCDe;
-			qDebug() << "\tHSCCo" << t.HSCCo;
-			qDebug() << "\tHSCSolu" << t.HSCSolu;
-			qDebug() << "\tHSCPhase" << t.HSCPhase;
-			qDebug() << "\tHSCCl" << t.HSCCl;
-			qDebug() << "\tsuHSCT1" << t.suHSCT1;
-			qDebug() << "\tsuHSCT2" << t.suHSCT2;
-			qDebug() << "\tsuHSCH" << t.suHSCH;
-			qDebug() << "\tsuHSCS" << t.suHSCS;
-			qDebug() << "\tsuHSCA" << t.suHSCA;
-			qDebug() << "\tsuHSCB" << t.suHSCB;
-			qDebug() << "\tsuHSCC" << t.suHSCC;
-			qDebug() << "\tsuHSCD" << t.suHSCD;
-			qDebug() << "\tsuHSCE" << t.suHSCE;
-			qDebug() << "\tsuHSCF" << t.suHSCF;
+	if(!filename.isEmpty()) {
+		QFile file(filename);
+		if(file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+			QTextStream stream(&file);
+			for(auto&& i : db) {
+				stream << "suHSCMP" << " " << i.suHSCMP << "\n";
+				stream << "suHSCBP" << " " << i.suHSCBP << "\n";
+				stream << "OriginDatabase" << " " << i.OriginDatabase << "\n";
+				stream << "SaveDate" << " " << i.SaveDate << "\n";
+				stream << "CAN" << " " << i.CAN << "\n";
+				stream << "formula" << " " << i.formula << "\n";
+				stream << "formulaS" << " " << i.formulaS << "\n";
+				stream << "NameCh" << " " << i.NameCh << "\n";
+				stream << "NameCo" << " " << i.NameCo << "\n";
+				stream << "HSCMP" << " " << i.HSCMP << "\n";
+				stream << "HSCBP" << " " << i.HSCBP << "\n";
+				stream << "Unit" << " " << i.Unit << "\n";
+				stream << "TemperatureUnit" << " " << i.TemperatureUnit << "\n";
+				for(auto&& t : i.TempRange) {
+					stream << "\tUnit" << " " << t.Unit << "\n";
+					stream << "\tTemperatureUnit" << " " << t.TemperatureUnit << "\n";
+					stream << "\tHSCTempIndex" << " " << t.HSCTempIndex << "\n";
+					stream << "\tReference" << " " << t.Reference << "\n";
+					stream << "\tHSCT1" << " " << t.HSCT1 << "\n";
+					stream << "\tHSCT2" << " " << t.HSCT2 << "\n";
+					stream << "\tHSCH" << " " << t.HSCH << "\n";
+					stream << "\tHSCS" << " " << t.HSCS << "\n";
+					stream << "\tHSCA" << " " << t.HSCA << "\n";
+					stream << "\tHSCB" << " " << t.HSCB << "\n";
+					stream << "\tHSCC" << " " << t.HSCC << "\n";
+					stream << "\tHSCD" << " " << t.HSCD << "\n";
+					stream << "\tHSCE" << " " << t.HSCE << "\n";
+					stream << "\tHSCF" << " " << t.HSCF << "\n";
+					stream << "\tHSCDe" << " " << t.HSCDe << "\n";
+					stream << "\tHSCCo" << " " << t.HSCCo << "\n";
+					stream << "\tHSCSolu" << " " << t.HSCSolu << "\n";
+					stream << "\tHSCPhase" << " " << t.HSCPhase << "\n";
+					stream << "\tHSCCl" << " " << t.HSCCl << "\n";
+					stream << "\tsuHSCT1" << " " << t.suHSCT1 << "\n";
+					stream << "\tsuHSCT2" << " " << t.suHSCT2 << "\n";
+					stream << "\tsuHSCH" << " " << t.suHSCH << "\n";
+					stream << "\tsuHSCS" << " " << t.suHSCS << "\n";
+					stream << "\tsuHSCA" << " " << t.suHSCA << "\n";
+					stream << "\tsuHSCB" << " " << t.suHSCB << "\n";
+					stream << "\tsuHSCC" << " " << t.suHSCC << "\n";
+					stream << "\tsuHSCD" << " " << t.suHSCD << "\n";
+					stream << "\tsuHSCE" << " " << t.suHSCE << "\n";
+					stream << "\tsuHSCF" << " " << t.suHSCF << "\n";
+				}
+				for(auto&& [element, amount] : i.composition) {
+					stream << "\t\t" << element << " " << amount << "\n";
+				}
+			}
 		}
-		for(auto&& [element, amount] : i.composition) {
-			qDebug() << "\t\t" << element << amount;
-		}
+		file.close();
 	}
+
+
+
 }
 
 void Database::PrintNames(const QString& filename) const

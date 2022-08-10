@@ -91,7 +91,7 @@ class Database final
 	DatabaseImpl db;
 public:
 	Database(const QString& filename);
-	void Print() const;
+	void Print(const QString& filename) const;
 	void PrintNames(const QString& filename) const;
 private:
 	void ParseFormulaToComposition();
