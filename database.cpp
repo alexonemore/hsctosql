@@ -229,9 +229,7 @@ void ParseFormula(const QString& formula, QString& suffix,
 
 	for(auto&& [text, amount1] : asterisk_separated_vec) {
 		if(contain_nested_brackets(text)) {
-			// (Co(NH3)6)Br3
-			// (Co(NH3)5Cl)Cl2
-			// K2Sr(B4O5(OH)4)2
+			// (Co(NH3)6)Br3, (Co(NH3)5Cl)Cl2, K2Sr(B4O5(OH)4)2
 			std::smatch m;
 			if(!std::regex_match(text, m, nested_brackets)) throw std::exception("Error in regex match in nested brackets");
 			//auto&& m0 = m[0];		// K2Sr(B4O5(OH)4)2Mo4
@@ -241,7 +239,6 @@ void ParseFormula(const QString& formula, QString& suffix,
 			auto&& m4 = m[4].str(); // 2
 			auto&& m5 = m[5].str(); // Mo4
 			auto amount_koef = m4.empty() ? 1.0 : std::stod(m4);
-
 			if(!m1.empty()) {
 				ParseFormulaWithoutNestedBrackets(composition, m1, amount1);
 			}
@@ -251,7 +248,6 @@ void ParseFormula(const QString& formula, QString& suffix,
 			if(!m5.empty()) {
 				ParseFormulaWithoutNestedBrackets(composition, m5, amount1);
 			}
-
 		} else {
 			if(QString(text.c_str()).contains('\'')) throw std::exception("contains \'");
 			ParseFormulaWithoutNestedBrackets(composition, text, amount1);
@@ -284,7 +280,7 @@ void ParseFormulaWithoutNestedBrackets(Composition& composition,
 
 void tests()
 {
-	if(contain_nested_brackets("F(Td(t)e)") &&
+	if(contain_nested_brackets("F(Td(te)") &&
 			!contain_nested_brackets("F(Td)t(e)") &&
 			!contain_nested_brackets("F(Tdte)") &&
 			contain_nested_brackets("F(Td(fst)e)") &&
@@ -324,7 +320,9 @@ void tests()
 		} else if(i.composition != cmp_test) {
 			qDebug() << i.formula << "fail in composition";
 		} else {
-			//qDebug() << i.formula << "test passed";
+#ifndef NDEBUG
+			qDebug() << i.formula << "test passed";
+#endif
 		}
 	}
 }
