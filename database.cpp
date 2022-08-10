@@ -155,9 +155,6 @@ void Database::Print(const QString& filename) const
 		}
 		file.close();
 	}
-
-
-
 }
 
 void Database::PrintNames(const QString& filename) const
