@@ -27,9 +27,10 @@
 
 ```
 1. Open elements.xlsx in Ms Excel
-2. Ctrl-a -> in new document Special Paste -> Transpose
-3. Ctrl-a -> paste in Notepad++
-4. Delete last line with Reference
-5. Save as "../hsc_elements.txt"
+2. Ctrl-a -> in new document Special Paste -> Values
+3. Ctrl-a -> in new list Special Paste -> Transpose
+4. Ctrl-a -> paste in Notepad++
+5. Delete last line with Reference
+6. Save as "../hsc_elements.txt"
 ```
 
