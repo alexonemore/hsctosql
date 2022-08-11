@@ -15,7 +15,7 @@ Database::Database(const QString& filename)
 		auto get_next_character = [&sr](){
 			auto type = sr.readNext();
 			if(type == QXmlStreamReader::TokenType::Characters) {
-				return sr.text().toString();
+				return sr.text().toString().trimmed();
 			}
 			else if(type == QXmlStreamReader::TokenType::EndElement) {
 				return QString{};
@@ -360,7 +360,7 @@ DataReferences::DataReferences(const QString& filename)
 		int i{1};
 		while(!stream.atEnd()) {
 			auto str = stream.readLine().split("\t");
-			db.push_back(DataReferencesItem{i++, str.at(0), str.at(1)});
+			db.push_back(DataReferencesItem{i++, str.at(0).trimmed(), str.at(1).trimmed()});
 		}
 		if(stream.status() != QTextStream::Ok) {
 			QString err("Read ERROR: ");
@@ -408,14 +408,14 @@ Elements::Elements(const QString& filename)
 			if(str.at(0) == "Property") {
 				properties.reserve(size-1);
 				for(int i = 1; i != size; ++i) {
-					properties.push_back(str.at(i));
+					properties.push_back(str.at(i).trimmed());
 				}
 				continue;
 			}
 			if(str.at(0) == "Units") {
 				property_units.reserve(size-1);
 				for(int i = 1; i != size; ++i) {
-					property_units.push_back(str.at(i));
+					property_units.push_back(str.at(i).trimmed());
 				}
 				continue;
 			}
@@ -426,7 +426,7 @@ Elements::Elements(const QString& filename)
 			auto&& last = values.last();
 			last.reserve(size-1);
 			for(int i = 1; i != size; ++i) {
-				last.push_back(str.at(i));
+				last.push_back(str.at(i).trimmed());
 			}
 		}
 		if(stream.status() != QTextStream::Ok) {

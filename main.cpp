@@ -19,7 +19,7 @@ int main() try
 	std::cout << "\tDatabase\tElements\n";
 	CompareSets(set, set_el);
 
-#if 0
+#if 1
 	dbel.Print("../out_elements.txt");
 	dbref.Print("../out_dbrefs.txt");
 	db.Print("../out_db.txt");
