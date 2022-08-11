@@ -12,13 +12,20 @@ int main() try
 	DataReferences dbref("../hsc_data_references.txt");
 	Database db("../hsc_database.xml");
 
+#if 0
 	auto set = db.GetElements();
 	auto set_el = dbel.GetElements();
 	std::cout << "Number of elements in Database: " << set.size() << std::endl;
 	std::cout << "Number of elements in Elements: " << set_el.size() <<std::endl;
 	std::cout << "\tDatabase\tElements\n";
 	CompareSets(set, set_el);
-
+#endif
+#if 1
+	auto set = db.GetFormulasContainsElement("T");
+	for(const auto& i : set) {
+		std::cout << i.toStdString() << std::endl;
+	}
+#endif
 #if 1
 	dbel.Print("../out_elements.txt");
 	dbref.Print("../out_dbrefs.txt");

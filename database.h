@@ -95,6 +95,7 @@ public:
 	void Print(const QString& filename) const;
 	void PrintNames(const QString& filename) const;
 	std::set<QString> GetElements() const;
+	std::set<QString> GetFormulasContainsElement(const QString& el) const;
 private:
 	void ParseFormulaToComposition();
 

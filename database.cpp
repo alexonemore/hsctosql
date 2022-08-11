@@ -194,6 +194,15 @@ std::set<QString> Database::GetElements() const
 	return set;
 }
 
+std::set<QString> Database::GetFormulasContainsElement(const QString& el) const
+{
+	std::set<QString> set;
+	for(const auto& i : db) {
+		if(i.composition.count(el)) set.insert(i.formula);
+	}
+	return set;
+}
+
 void Database::ParseFormulaToComposition()
 {
 	for(auto&& i : db) {
