@@ -345,7 +345,10 @@ DataReferences::DataReferences(const QString& filename)
 			db.push_back(DataReferencesItem{i++, str.at(0), str.at(1)});
 		}
 		if(stream.status() != QTextStream::Ok) {
-			qDebug() << "Read ERROR:" << filename;
+			QString err("Read ERROR: ");
+			err.append(filename);
+			qDebug() << err;
+			throw std::exception(err.toStdString().c_str());
 		}
 	}
 	file.close();
