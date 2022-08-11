@@ -183,6 +183,17 @@ void Database::PrintNames(const QString& filename) const
 	}
 }
 
+std::set<QString> Database::GetElements() const
+{
+	std::set<QString> set;
+	for(const auto& i : db) {
+		for(const auto& j : i.composition) {
+			set.insert(j.first);
+		}
+	}
+	return set;
+}
+
 void Database::ParseFormulaToComposition()
 {
 	for(auto&& i : db) {
@@ -451,4 +462,15 @@ void Elements::Print(const QString& filename) const
 		}
 		file.close();
 	}
+}
+
+std::set<QString> Elements::GetElements() const
+{
+	// Symbol = 1
+	if(properties.at(1) != "Symbol") throw std::exception("Symbol is not in col 1");
+	std::set<QString> set;
+	for(const auto& i : values) {
+		set.insert(i.at(1));
+	}
+	return set;
 }

@@ -1,7 +1,10 @@
-#include <QDebug>
 #include "database.h"
-
+#include <iostream>
 #include <set>
+
+// 28 HSC - Databases.pdf
+
+void CompareSets(const std::set<QString>& set1, const std::set<QString>& set2);
 
 int main() try
 {
@@ -9,23 +12,12 @@ int main() try
 	DataReferences dbref("../hsc_data_references.txt");
 	Database db("../hsc_database.xml");
 
-	std::set<QString> set;
-#if 0
-	for(const auto& i : db) {
-		set.insert(i.suffix);
-	}
-	qDebug() << "Number of suffixes:" << set.size();
-	for(auto&& i : set) { qDebug() << i; }
-#elif 1
-	set.clear();
-	for(const auto& i : db) {
-		for(const auto& j : i.composition) {
-			set.insert(j.first);
-		}
-	}
-	qDebug() << "Number of elements:" << set.size();
-	for(auto&& i : set) { qDebug() << i; }
-#endif
+	auto set = db.GetElements();
+	auto set_el = dbel.GetElements();
+	std::cout << "Number of elements in Database: " << set.size() << std::endl;
+	std::cout << "Number of elements in Elements: " << set_el.size() <<std::endl;
+	std::cout << "\tDatabase\tElements\n";
+	CompareSets(set, set_el);
 
 #if 0
 	dbel.Print("../out_elements.txt");
@@ -35,7 +27,18 @@ int main() try
 
 	return 0;
 } catch(std::exception& e) {
-	qDebug() << e.what();
+	std::cerr << e.what() << std::endl;
 }
 
-// 28 HSC - Databases.pdf
+void CompareSets(const std::set<QString>& set1, const std::set<QString>& set2)
+{
+	std::set<QString> merger;
+	for(const auto& i : set1) { merger.insert(i); }
+	for(const auto& i : set2) { merger.insert(i); }
+	for(const auto& i : merger) {
+		std::cout << i.toStdString() << "\t" << (set1.count(i) ? "+" : "-")
+				  << "\t" << (set2.count(i) ? "+" : "-") << std::endl;
+	}
+}
+
+

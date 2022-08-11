@@ -5,6 +5,7 @@
 #include <QString>
 #include <QHash>
 #include <unordered_map>
+#include <set>
 
 using Composition = std::unordered_map<QString, double>;
 
@@ -93,12 +94,7 @@ public:
 	Database(const QString& filename);
 	void Print(const QString& filename) const;
 	void PrintNames(const QString& filename) const;
-	auto begin() const { return db.cbegin(); }
-	auto end() const { return db.cend(); }
-	auto cbegin() const { return db.cbegin(); }
-	auto cend() const { return db.cend(); }
-	auto begin() { return db.begin(); }
-	auto end() { return db.end(); }
+	std::set<QString> GetElements() const;
 private:
 	void ParseFormulaToComposition();
 
@@ -128,6 +124,7 @@ class Elements final
 public:
 	Elements(const QString& filename);
 	void Print(const QString& filename) const;
+	std::set<QString> GetElements() const;
 };
 
 
