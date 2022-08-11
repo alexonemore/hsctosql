@@ -21,7 +21,7 @@ int main() try
 	CompareSets(set, set_el);
 #endif
 #if 1
-	auto set = db.GetFormulasContainsElement("T");
+	auto set = db.GetFormulasContainsElement("D");
 	for(const auto& i : set) {
 		std::cout << i.toStdString() << std::endl;
 	}
