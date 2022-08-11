@@ -398,12 +398,14 @@ Elements::Elements(const QString& filename)
 				for(int i = 1; i != size; ++i) {
 					properties.push_back(str.at(i));
 				}
+				continue;
 			}
 			if(str.at(0) == "Units") {
 				property_units.reserve(size-1);
 				for(int i = 1; i != size; ++i) {
 					property_units.push_back(str.at(i));
 				}
+				continue;
 			}
 			if(str.at(0) == "Diagram") {
 				continue;
@@ -426,17 +428,23 @@ Elements::Elements(const QString& filename)
 	file.close();
 }
 
-void Elements::Print(const QString& filename)
+void Elements::Print(const QString& filename) const
 {
 	if(!filename.isEmpty()) {
 		QFile file(filename);
 		if(file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
 			QTextStream stream(&file);
-			auto number_of_properties = properties.size();
-			for(int i = 0; i != number_of_properties; ++i) {
-				stream << properties.at(i) << "\t" << property_units.at(i) << "\t";
-				for(const auto& v : values.at(i)) {
-					stream << v << "\t";
+			for(const auto& i : properties) {
+				stream << i << "\t";
+			}
+			stream << "\n";
+			for(const auto& i : property_units) {
+				stream << i << "\t";
+			}
+			stream << "\n";
+			for(const auto& i : values) {
+				for(const auto& j : i) {
+					stream << j << "\t";
 				}
 				stream << "\n";
 			}

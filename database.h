@@ -127,7 +127,7 @@ class Elements final
 	QVector<QVector<QString>> values;
 public:
 	Elements(const QString& filename);
-	void Print(const QString& filename);
+	void Print(const QString& filename) const;
 };
 
 
