@@ -6,7 +6,7 @@
 
 int main()
 {
-	const QString dbfilename("../OwnDB9_all_28477.xml");
+	const QString dbfilename("../hsc_database.xml");
 
 	try {
 		Database db(dbfilename);
