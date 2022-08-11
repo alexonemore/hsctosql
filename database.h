@@ -65,6 +65,7 @@ struct HSCDBTempRange
 
 struct HSCDBSpecies
 {
+	int id;
 	QString suHSCMP; // Melting Point
 	QString suHSCBP; // Boiling Point
 	QString OriginDatabase; // Own
@@ -92,12 +93,18 @@ public:
 	Database(const QString& filename);
 	void Print(const QString& filename) const;
 	void PrintNames(const QString& filename) const;
+	auto begin() const { return db.cbegin(); }
+	auto end() const { return db.cend(); }
+	auto cbegin() const { return db.cbegin(); }
+	auto cend() const { return db.cend(); }
+	auto begin() { return db.begin(); }
+	auto end() { return db.end(); }
 private:
 	void ParseFormulaToComposition();
 
 };
 
-class DataReferences
+class DataReferences final
 {
 	struct DataReferencesItem
 	{
@@ -112,6 +119,17 @@ public:
 	void Print(const QString& filename) const;
 	QVector<QString> FindLongNames(const QString& short_name) const;
 };
+
+class Elements final
+{
+	QVector<QString> properties;
+	QVector<QString> property_units;
+	QVector<QVector<QString>> values;
+public:
+	Elements(const QString& filename);
+	void Print(const QString& filename);
+};
+
 
 void ParseFormula(const QString& formula, QString& suffix,
 					  Composition& composition);

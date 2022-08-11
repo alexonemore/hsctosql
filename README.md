@@ -1,9 +1,9 @@
-# hsc database to sql (sqlite)
+# HSC database to SQL (sqlite)
 
-## 32 Data References.pdf
+## Data references
 
 ```
-1. Open pdf in Ms Word
+1. Open "32 Data References.pdf" in Ms Word
 2. Replace \t -> space
 3. Replace \n -> space
 4. Replace spacespace -> space
@@ -14,7 +14,7 @@
 9. Replace "\n -> \n
 10. Replace \n\n -> \n
 11. Delete first empty line
-12. Save as "../data_references.txt"
+12. Save as "../hsc_data_references.txt"
 ```
 
 ## Main database
@@ -22,3 +22,14 @@
 ```
 1. Save as "../hsc_database.xml"
 ```
+
+## Elements
+
+```
+1. Open elements.xlsx in Ms Excel
+2. Ctrl-a -> in new document Special Paste -> Transpose
+3. Ctrl-a -> paste in Notepad++
+4. Delete last line with Reference
+5. Save as "../hsc_elements.txt"
+```
+

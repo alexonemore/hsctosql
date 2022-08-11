@@ -94,6 +94,11 @@ Database::Database(const QString& filename)
 		}
 		file.close();
 	}
+	int i{1};
+	for(auto&& d : db) {
+		d.id = i++;
+	}
+
 	ParseFormulaToComposition();
 }
 
@@ -104,6 +109,7 @@ void Database::Print(const QString& filename) const
 		if(file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
 			QTextStream stream(&file);
 			for(auto&& i : db) {
+				stream << "id" << " " << i.id << "\n";
 				stream << "suHSCMP" << " " << i.suHSCMP << "\n";
 				stream << "suHSCBP" << " " << i.suHSCBP << "\n";
 				stream << "OriginDatabase" << " " << i.OriginDatabase << "\n";
@@ -377,4 +383,57 @@ QVector<QString> DataReferences::FindLongNames(const QString& short_name) const
 		}
 	}
 	return long_names_list;
+}
+
+Elements::Elements(const QString& filename)
+{
+	QFile file(filename);
+	if(file.open(QIODevice::ReadOnly)) {
+		QTextStream stream(&file);
+		while(!stream.atEnd()) {
+			auto str = stream.readLine().split("\t");
+			auto size = str.size();
+			if(str.at(0) == "Property") {
+				properties.reserve(size-1);
+				for(int i = 1; i != size; ++i) {
+					properties.push_back(str.at(i));
+				}
+			}
+			if(str.at(0) == "Units") {
+				property_units.reserve(size-1);
+				for(int i = 1; i != size; ++i) {
+					property_units.push_back(str.at(i));
+				}
+			}
+			if(str.at(0) == "Diagram") {
+				continue;
+			}
+			values.push_back(QVector<QString>{});
+			auto&& last = values.last();
+			last.reserve(size-1);
+			for(int i = 1; i != size; ++i) {
+				last.push_back(str.at(i));
+			}
+
+		}
+		if(stream.status() != QTextStream::Ok) {
+			QString err("Read ERROR: ");
+			err.append(filename);
+			qDebug() << err;
+			throw std::exception(err.toStdString().c_str());
+		}
+	}
+	file.close();
+}
+
+void Elements::Print(const QString& filename)
+{
+	if(!filename.isEmpty()) {
+		QFile file(filename);
+		if(file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+			QTextStream stream(&file);
+
+		}
+		file.close();
+	}
 }
