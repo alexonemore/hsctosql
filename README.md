@@ -14,7 +14,11 @@
 9. Replace "\n -> \n
 10. Replace \n\n -> \n
 11. Delete first empty line
-12. Save 
+12. Save as "../data_references.txt"
 ```
 
+## Main database
 
+```
+1. Save as "../hsc_database.xml"
+```
