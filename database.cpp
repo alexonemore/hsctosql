@@ -416,7 +416,6 @@ Elements::Elements(const QString& filename)
 			for(int i = 1; i != size; ++i) {
 				last.push_back(str.at(i));
 			}
-
 		}
 		if(stream.status() != QTextStream::Ok) {
 			QString err("Read ERROR: ");

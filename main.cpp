@@ -4,29 +4,29 @@
 
 #include <vector>
 
-int main()
+int main() try
 {
 	const QString dbfilename("../hsc_database.xml");
 	const QString data_references_filename("../hsc_data_references.txt");
 	const QString elements_filename("../hsc_elements.txt");
 
-	try {
-		Elements dbel(elements_filename);
-		dbel.Print("../out_elements.txt");
+	Elements dbel(elements_filename);
+	DataReferences dbref(data_references_filename);
+	Database db(dbfilename);
 
-		DataReferences dbref(data_references_filename);
-		dbref.Print("../out_dbrefs.txt");
+	for(const auto& i : db) {
 
-		Database db(dbfilename);
-		//db.PrintNames("../out_names.txt");
-		db.Print("../out_db.txt");
-
-
-	} catch(std::exception& ex) {
-		qDebug() << ex.what();
 	}
 
+#if 0
+	dbel.Print("../out_elements.txt");
+	dbref.Print("../out_dbrefs.txt");
+	db.Print("../out_db.txt");
+#endif
+
 	return 0;
+} catch(std::exception& e) {
+	qDebug() << e.what();
 }
 
 // 28 HSC - Databases.pdf
