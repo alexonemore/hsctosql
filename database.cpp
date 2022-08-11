@@ -432,7 +432,14 @@ void Elements::Print(const QString& filename)
 		QFile file(filename);
 		if(file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
 			QTextStream stream(&file);
-
+			auto number_of_properties = properties.size();
+			for(int i = 0; i != number_of_properties; ++i) {
+				stream << properties.at(i) << "\t" << property_units.at(i) << "\t";
+				for(const auto& v : values.at(i)) {
+					stream << v << "\t";
+				}
+				stream << "\n";
+			}
 		}
 		file.close();
 	}
