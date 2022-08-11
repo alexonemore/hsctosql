@@ -1,22 +1,31 @@
 #include <QDebug>
-#include <QtXml>
 #include "database.h"
 
-#include <vector>
+#include <set>
 
 int main() try
 {
-	const QString dbfilename("../hsc_database.xml");
-	const QString data_references_filename("../hsc_data_references.txt");
-	const QString elements_filename("../hsc_elements.txt");
+	Elements dbel("../hsc_elements.txt");
+	DataReferences dbref("../hsc_data_references.txt");
+	Database db("../hsc_database.xml");
 
-	Elements dbel(elements_filename);
-	DataReferences dbref(data_references_filename);
-	Database db(dbfilename);
-
+	std::set<QString> set;
+#if 0
 	for(const auto& i : db) {
-
+		set.insert(i.suffix);
 	}
+	qDebug() << "Number of suffixes:" << set.size();
+	for(auto&& i : set) { qDebug() << i; }
+#elif 1
+	set.clear();
+	for(const auto& i : db) {
+		for(const auto& j : i.composition) {
+			set.insert(j.first);
+		}
+	}
+	qDebug() << "Number of elements:" << set.size();
+	for(auto&& i : set) { qDebug() << i; }
+#endif
 
 #if 0
 	dbel.Print("../out_elements.txt");

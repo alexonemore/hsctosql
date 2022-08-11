@@ -82,7 +82,7 @@ struct HSCDBSpecies
 	QVector<HSCDBTempRange> TempRange;
 	Composition composition; // parsed from Formula
 	QString suffix;
-	SubstanceType type;	
+	//SubstanceType type;
 };
 
 class Database final

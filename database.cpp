@@ -123,6 +123,7 @@ void Database::Print(const QString& filename) const
 				stream << "HSCBP" << " " << i.HSCBP << "\n";
 				stream << "Unit" << " " << i.Unit << "\n";
 				stream << "TemperatureUnit" << " " << i.TemperatureUnit << "\n";
+				stream << "Suffix " << i.suffix << "\n";
 				for(auto&& t : i.TempRange) {
 					stream << "\tUnit" << " " << t.Unit << "\n";
 					stream << "\tTemperatureUnit" << " " << t.TemperatureUnit << "\n";
