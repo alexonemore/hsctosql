@@ -333,3 +333,45 @@ void tests()
 		}
 	}
 }
+
+DataReferences::DataReferences(const QString& filename)
+{
+	QFile file(filename);
+	if(file.open(QIODevice::ReadOnly)) {
+		QTextStream stream(&file);
+		int i{1};
+		while(!stream.atEnd()) {
+			auto str = stream.readLine().split("\t");
+			db.push_back(DataReferencesItem{i++, str.at(0), str.at(1)});
+		}
+		if(stream.status() != QTextStream::Ok) {
+			qDebug() << "Read ERROR:" << filename;
+		}
+	}
+	file.close();
+}
+
+void DataReferences::Print(const QString& filename) const
+{
+	if(!filename.isEmpty()) {
+		QFile file(filename);
+		if(file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+			QTextStream stream(&file);
+			for(const auto& [number_, short_name_, long_name_] : db) {
+				stream << number_ << "\t" << short_name_ << "\t" << long_name_ << "\n";
+			}
+		}
+		file.close();
+	}
+}
+
+QVector<QString> DataReferences::FindLongNames(const QString& short_name) const
+{
+	QVector<QString> long_names_list;
+	for(const auto& [_, short_name_, long_name_] : db) {
+		if(short_name == short_name_) {
+			long_names_list.push_back(long_name_);
+		}
+	}
+	return long_names_list;
+}

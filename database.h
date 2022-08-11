@@ -84,10 +84,9 @@ struct HSCDBSpecies
 	SubstanceType type;	
 };
 
-using DatabaseImpl = QVector<HSCDBSpecies>;
-
 class Database final
 {
+	using DatabaseImpl = QVector<HSCDBSpecies>;
 	DatabaseImpl db;
 public:
 	Database(const QString& filename);
@@ -96,6 +95,22 @@ public:
 private:
 	void ParseFormulaToComposition();
 
+};
+
+class DataReferences
+{
+	struct DataReferencesItem
+	{
+		int id;
+		QString short_name;
+		QString long_name;
+	};
+	using DataReferencesImpl = QVector<DataReferencesItem>;
+	DataReferencesImpl db;
+public:
+	DataReferences(const QString& filename);
+	void Print(const QString& filename) const;
+	QVector<QString> FindLongNames(const QString& short_name) const;
 };
 
 void ParseFormula(const QString& formula, QString& suffix,
