@@ -494,6 +494,22 @@ void Elements::Print(const QString& filename) const
 	}
 }
 
+void Elements::PrintProperties() const
+{
+	for(const auto& i : properties) {
+		std::cout << i.toStdString() << std::endl;
+		//qDebug() << i;
+	}
+}
+
+void Elements::PrintPropertyUnits() const
+{
+	for(const auto& i : property_units) {
+		std::cout << i.toStdString() << std::endl;
+		//qDebug() << i;
+	}
+}
+
 std::set<QString> Elements::GetElements() const
 {
 	// Symbol = 1

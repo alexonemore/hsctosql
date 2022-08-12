@@ -40,6 +40,9 @@ int main() try
 	CheckSuEqualNonSu(db);
 	CheckUnits(db);
 
+	dbel.PrintProperties();
+	dbel.PrintPropertyUnits();
+
 #ifndef NDEBUG
 	CompareElements(db, dbel);
 	PrintFormulasContainsElement(db, "T");

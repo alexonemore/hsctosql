@@ -145,6 +145,8 @@ class Elements final
 public:
 	Elements(const QString& filename);
 	void Print(const QString& filename) const;
+	void PrintProperties() const;
+	void PrintPropertyUnits() const;
 	std::set<QString> GetElements() const;
 };
 
