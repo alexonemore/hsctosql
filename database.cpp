@@ -378,7 +378,7 @@ void tests()
 			throw std::exception(str.toStdString().c_str());
 		} else {
 #ifndef NDEBUG
-			std::cout << i.formula.toStdString() << " test passed";
+			std::cout << i.formula.toStdString() << " parse formula test passed\n";
 #endif
 		}
 	}
