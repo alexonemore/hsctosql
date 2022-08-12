@@ -18,7 +18,6 @@
 
 #include "database.h"
 #include <QFile>
-#include <QDebug>
 #include <QtXml>
 #include <regex>
 #include <iostream>
@@ -38,8 +37,9 @@ Database::Database(const QString& filename)
 			else if(type == QXmlStreamReader::TokenType::EndElement) {
 				return QString{};
 			} else {
-				qDebug() << sr.tokenString() << sr.name() << sr.text();
-				throw std::exception("Error get_next_character");
+				QString str("ERROR get_next_character: ");
+				str += sr.tokenString() + " " + sr.name() + " " + sr.text();
+				throw std::exception(str.toStdString().c_str());
 			}
 		};
 		bool in_temp_range{false};
@@ -107,8 +107,9 @@ Database::Database(const QString& filename)
 
 		} while(!sr.atEnd());
 		if(sr.hasError()) {
-			qDebug() << "Error:" << sr.errorString();
-			throw std::exception("Error: QXmlStreamReader has error");
+			QString str("ERROR QXmlStreamReader: ");
+			str += sr.errorString();
+			throw std::exception(str.toStdString().c_str());
 		}
 		file.close();
 	}
@@ -341,7 +342,7 @@ void tests()
 			contain_nested_brackets("K2Sr(B4O5(OH)4)2"))
 	{
 	} else {
-		qDebug() << "tests_contain_nested_brackets failed";
+		throw std::exception("ERROR tests_contain_nested_brackets failed");
 	}
 	struct Test{
 		QString formula;
@@ -368,12 +369,16 @@ void tests()
 		cmp_test.clear();
 		ParseFormula(i.formula, suffix_test, cmp_test);
 		if(i.suffix != suffix_test) {
-			qDebug() << i.formula << "fail in suffix" << i.suffix << suffix_test;
+			QString str("ERROR fail in suffix: ");
+			str += i.formula + " " + i.suffix + " " + suffix_test;
+			throw std::exception(str.toStdString().c_str());
 		} else if(i.composition != cmp_test) {
-			qDebug() << i.formula << "fail in composition";
+			QString str("ERROR fail in composition: ");
+			str += i.formula;
+			throw std::exception(str.toStdString().c_str());
 		} else {
 #ifndef NDEBUG
-			qDebug() << i.formula << "test passed";
+			std::cout << i.formula.toStdString() << " test passed";
 #endif
 		}
 	}
@@ -390,9 +395,8 @@ DataReferences::DataReferences(const QString& filename)
 			db.push_back(DataReferencesItem{i++, str.at(0).trimmed(), str.at(1).trimmed()});
 		}
 		if(stream.status() != QTextStream::Ok) {
-			QString err("Read ERROR: ");
-			err.append(filename);
-			qDebug() << err;
+			QString err("ERROR read file: ");
+			err += filename;
 			throw std::exception(err.toStdString().c_str());
 		}
 	}
@@ -457,9 +461,8 @@ Elements::Elements(const QString& filename)
 			}
 		}
 		if(stream.status() != QTextStream::Ok) {
-			QString err("Read ERROR: ");
-			err.append(filename);
-			qDebug() << err;
+			QString err("ERROR read file: ");
+			err += filename;
 			throw std::exception(err.toStdString().c_str());
 		}
 	}
