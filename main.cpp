@@ -23,6 +23,10 @@
 // 28 HSC - Databases.pdf
 
 void CompareSets(const std::set<QString>& set1, const std::set<QString>& set2);
+void CompareElements(const Database& db, const Elements& dbel);
+void PrintFormulasContainsElement(const Database& db, const QString& element);
+void PrintOutFiles(const Database& db, const Elements& dbel,
+				   const DataReferences& dbref, const QString& prefix_path);
 
 int main() try
 {
@@ -30,24 +34,10 @@ int main() try
 	DataReferences dbref("../hsc_data_references.txt");
 	Database db("../hsc_database.xml");
 
-#if 0
-	auto set = db.GetElements();
-	auto set_el = dbel.GetElements();
-	std::cout << "Number of elements in Database: " << set.size() << std::endl;
-	std::cout << "Number of elements in Elements: " << set_el.size() <<std::endl;
-	std::cout << "\tDatabase\tElements\n";
-	CompareSets(set, set_el);
-#endif
-#if 1
-	auto set = db.GetFormulasContainsElement("D");
-	for(const auto& i : set) {
-		std::cout << i.toStdString() << std::endl;
-	}
-#endif
-#if 1
-	dbel.Print("../out_elements.txt");
-	dbref.Print("../out_dbrefs.txt");
-	db.Print("../out_db.txt");
+#ifndef NDEBUG
+	CompareElements(db, dbel);
+	PrintFormulasContainsElement(db, "T");
+	PrintOutFiles(db, dbel, dbref, "../");
 #endif
 
 	return 0;
@@ -66,4 +56,29 @@ void CompareSets(const std::set<QString>& set1, const std::set<QString>& set2)
 	}
 }
 
+void CompareElements(const Database& db, const Elements& dbel)
+{
+	auto set = db.GetElements();
+	auto set_el = dbel.GetElements();
+	std::cout << "Number of elements in Database: " << set.size() << std::endl;
+	std::cout << "Number of elements in Elements: " << set_el.size() <<std::endl;
+	std::cout << "\tDatabase\tElements\n";
+	CompareSets(set, set_el);
+}
+
+void PrintFormulasContainsElement(const Database& db, const QString& element)
+{
+	auto set = db.GetFormulasContainsElement(element);
+	for(const auto& i : set) {
+		std::cout << i.toStdString() << std::endl;
+	}
+}
+
+void PrintOutFiles(const Database& db, const Elements& dbel,
+				   const DataReferences& dbref, const QString& prefix_path)
+{
+	dbel.Print(prefix_path + "out_elements.txt");
+	dbref.Print(prefix_path + "out_dbrefs.txt");
+	db.Print(prefix_path + "out_db.txt");
+}
 
