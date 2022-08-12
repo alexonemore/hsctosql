@@ -51,8 +51,8 @@ enum class SubstanceType
 
 struct HSCDBTempRange
 {
-	QString Unit; // Joules
-	QString TemperatureUnit; // Kelvin
+	QString Unit; // Joules always
+	QString TemperatureUnit; // Kelvin always
 	QString HSCTempIndex;
 	QString Reference;
 	QString HSCT1; // Tmin K
@@ -85,8 +85,8 @@ struct HSCDBTempRange
 struct HSCDBSpecies
 {
 	int id;
-	QString suHSCMP; // Melting Point
-	QString suHSCBP; // Boiling Point
+	QString suHSCMP; // Melting Point always equal HSCMP
+	QString suHSCBP; // Boiling Point always equal HSCBP
 	QString OriginDatabase; // Own
 	QString SaveDate; // 2022-06-02T11:05:19.1268694+03:00
 	QString CAN; // CAS
@@ -96,8 +96,8 @@ struct HSCDBSpecies
 	QString NameCo; // Common Name
 	QString HSCMP; // Melting Point
 	QString HSCBP; // Boiling Point
-	QString Unit; // Joules
-	QString TemperatureUnit; // Kelvin
+	QString Unit; // Joules always
+	QString TemperatureUnit; // Kelvin always
 	QVector<HSCDBTempRange> TempRange;
 	Composition composition; // parsed from Formula
 	QString suffix;

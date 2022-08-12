@@ -27,12 +27,18 @@ void CompareElements(const Database& db, const Elements& dbel);
 void PrintFormulasContainsElement(const Database& db, const QString& element);
 void PrintOutFiles(const Database& db, const Elements& dbel,
 				   const DataReferences& dbref, const QString& prefix_path);
+void CheckSuMPBPEqualMPBP(const Database& db);
+void CheckUnits(const Database& db);
+
 
 int main() try
 {
 	Elements dbel("../hsc_elements.txt");
 	DataReferences dbref("../hsc_data_references.txt");
 	Database db("../hsc_database.xml");
+
+	CheckSuMPBPEqualMPBP(db);
+	CheckUnits(db);
 
 #ifndef NDEBUG
 	CompareElements(db, dbel);
@@ -81,4 +87,54 @@ void PrintOutFiles(const Database& db, const Elements& dbel,
 	dbref.Print(prefix_path + "out_dbrefs.txt");
 	db.Print(prefix_path + "out_db.txt");
 }
+
+void CheckSuMPBPEqualMPBP(const Database& db)
+{
+	for(const auto& i : db) {
+		if(i.suHSCMP != i.HSCMP) {
+			std::cout << "MP: " << i.formula.toStdString() << std::endl;
+			throw std::exception("suHSCMP");
+		}
+		if(i.suHSCBP != i.HSCBP) {
+			std::cout << "BP: " << i.formula.toStdString() << std::endl;
+			throw std::exception("suHSCBP");
+		}
+	}
+}
+
+void CheckUnits(const Database& db)
+{
+	QString joules("Joules");
+	QString kelvin("Kelvin");
+
+	for(const auto& i : db) {
+		if(i.Unit != joules) {
+			std::cout << "Species Units: " << i.Unit.toStdString()
+					  << " in " << i.formula.toStdString() << std::endl;
+			throw std::exception("SpeciesUnits");
+		}
+		if(i.TemperatureUnit != kelvin) {
+			std::cout << "Species TemperatureUnit: " << i.Unit.toStdString()
+					  << " in " << i.formula.toStdString() << std::endl;
+			throw std::exception("SpeciesTemperatureUnit");
+		}
+		for(const auto& temprange : i.TempRange) {
+			if(temprange.Unit != joules) {
+				std::cout << "TempRange Units: " << temprange.Unit.toStdString()
+						  << " in " << i.formula.toStdString() << std::endl;
+				throw std::exception("TempRangeUnits");
+			}
+			if(temprange.TemperatureUnit != kelvin) {
+				std::cout << "TempRange TemperatureUnit: "
+						  << temprange.TemperatureUnit.toStdString()
+						  << " in " << i.formula.toStdString() << std::endl;
+				throw std::exception("TempRangeTemperatureUnit");
+			}
+		}
+	}
+}
+
+
+
+
 
