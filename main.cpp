@@ -42,7 +42,7 @@ int main() try
 	dbel.PrintProperties();
 	dbel.PrintPropertyUnits();
 
-#ifndef NDEBUG
+#ifdef NDEBUG
 	CompareElements(db, dbel);
 	PrintFormulasContainsElement(db, "T");
 	PrintOutFiles(db, dbel, dbref, "../");
