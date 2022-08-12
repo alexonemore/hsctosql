@@ -1,20 +1,20 @@
-# This file is part of ATC (AdiabaticTemperatureCalculator).
+# This file is part of HSCToSQL (Database converter).
 # Copyright (c) 2022 Alexandr Shchukin
 # Corresponding email: shchukin@ism.ac.ru
 #
-# ATC (AdiabaticTemperatureCalculator) is free software:
+# HSCToSQL (Database converter) is free software:
 # you can redistribute it and/or modify it under the terms
 # of the GNU General Public License as published by
 # the Free Software Foundation, version 3.
 #
-# ATC (AdiabaticTemperatureCalculator) is distributed in the hope that
+# HSCToSQL (Database converter) is distributed in the hope that
 # it will be useful, but WITHOUT ANY WARRANTY;
 # without even the implied warranty of MERCHANTABILITY or
 # FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with ATC (AdiabaticTemperatureCalculator).
+# along with HSCToSQL (Database converter).
 # If not, see <http://www.gnu.org/licenses/>.
 
 cmake_minimum_required(VERSION 3.14)
