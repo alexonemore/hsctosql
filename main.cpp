@@ -145,6 +145,3 @@ void CheckUnits(const Database& db)
 }
 
 
-
-
-
