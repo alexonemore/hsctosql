@@ -30,7 +30,6 @@ void PrintOutFiles(const Database& db, const Elements& dbel,
 void CheckSuEqualNonSu(const Database& db);
 void CheckUnits(const Database& db);
 
-
 int main() try
 {
 	Elements dbel("../hsc_elements.txt");
