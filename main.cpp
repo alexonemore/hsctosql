@@ -27,7 +27,7 @@ void CompareElements(const Database& db, const Elements& dbel);
 void PrintFormulasContainsElement(const Database& db, const QString& element);
 void PrintOutFiles(const Database& db, const Elements& dbel,
 				   const DataReferences& dbref, const QString& prefix_path);
-void CheckSuMPBPEqualMPBP(const Database& db);
+void CheckSuEqualNonSu(const Database& db);
 void CheckUnits(const Database& db);
 
 
@@ -37,7 +37,7 @@ int main() try
 	DataReferences dbref("../hsc_data_references.txt");
 	Database db("../hsc_database.xml");
 
-	CheckSuMPBPEqualMPBP(db);
+	CheckSuEqualNonSu(db);
 	CheckUnits(db);
 
 #ifndef NDEBUG
@@ -88,7 +88,7 @@ void PrintOutFiles(const Database& db, const Elements& dbel,
 	db.Print(prefix_path + "out_db.txt");
 }
 
-void CheckSuMPBPEqualMPBP(const Database& db)
+void CheckSuEqualNonSu(const Database& db)
 {
 	for(const auto& i : db) {
 		if(i.suHSCMP != i.HSCMP) {
@@ -98,6 +98,16 @@ void CheckSuMPBPEqualMPBP(const Database& db)
 		if(i.suHSCBP != i.HSCBP) {
 			std::cout << "BP: " << i.formula.toStdString() << std::endl;
 			throw std::exception("suHSCBP");
+		}
+		for(const auto& temprange : i.TempRange) {
+			if(temprange.suHSCT1 != temprange.HSCT1) {
+				std::cout << "suHSCT1: " << i.formula.toStdString() << std::endl;
+				throw std::exception("suHSCT1");
+			}
+			if(temprange.suHSCT2 != temprange.HSCT2) {
+				std::cout << "suHSCT2: " << i.formula.toStdString() << std::endl;
+				throw std::exception("suHSCT2");
+			}
 		}
 	}
 }
