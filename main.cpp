@@ -19,16 +19,19 @@
 #include "database.h"
 #include <iostream>
 #include <set>
+#include <map>
 
 // 28 HSC - Databases.pdf
 
 void CompareSets(const std::set<QString>& set1, const std::set<QString>& set2);
-void CompareElements(const Database& db, const Elements& dbel);
+void PrintCompareElements(const Database& db, const Elements& dbel);
 void PrintFormulasContainsElement(const Database& db, const QString& element);
 void PrintOutFiles(const Database& db, const Elements& dbel,
 				   const DataReferences& dbref, const QString& prefix_path);
 void CheckSuEqualNonSu(const Database& db);
 void CheckUnits(const Database& db);
+void PrintPhases(const Database& db);
+void PrintNumberOfRanges(const Database& db);
 
 int main() try
 {
@@ -39,11 +42,12 @@ int main() try
 	CheckSuEqualNonSu(db);
 	CheckUnits(db);
 
+#ifndef NDEBUG
 	dbel.PrintProperties();
 	dbel.PrintPropertyUnits();
-
-#if 0
-	CompareElements(db, dbel);
+	PrintPhases(db);
+	PrintNumberOfRanges(db);
+	PrintCompareElements(db, dbel);
 	PrintFormulasContainsElement(db, "T");
 	PrintOutFiles(db, dbel, dbref, "../");
 #endif
@@ -64,7 +68,7 @@ void CompareSets(const std::set<QString>& set1, const std::set<QString>& set2)
 	}
 }
 
-void CompareElements(const Database& db, const Elements& dbel)
+void PrintCompareElements(const Database& db, const Elements& dbel)
 {
 	auto set = db.GetElements();
 	auto set_el = dbel.GetElements();
@@ -143,6 +147,32 @@ void CheckUnits(const Database& db)
 				throw std::exception("TempRangeTemperatureUnit");
 			}
 		}
+	}
+}
+
+void PrintPhases(const Database& db)
+{
+	std::unordered_map<QString, int> hist;
+	for(const auto& i : db) {
+		for(const auto& j : i.TempRange) {
+			hist[j.HSCPhase] += 1;
+		}
+	}
+	std::cout << "HSCPhases:\n";
+	for(const auto& i : hist) {
+		std::cout << i.first.toStdString() << "\t" << i.second << std::endl;
+	}
+}
+
+void PrintNumberOfRanges(const Database& db)
+{
+	std::map<int, int> map;
+	for(const auto& i : db) {
+		map[i.TempRange.size()] += 1;
+	}
+	std::cout << "Number of ranges:\n";
+	for(const auto& i : map) {
+		std::cout << i.first << "\t" << i.second << std::endl;
 	}
 }
 
