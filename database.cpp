@@ -579,7 +579,7 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 			   const Elements& dbel, const Colors& dbcolor, const Units& dbunit,
 			   const QString& filename)
 {
-	QString new_filename(filename);
+	QString new_filename(FilenameIncrement(filename));
 	while(QFile::exists(new_filename)) {
 		new_filename = FilenameIncrement(new_filename);
 	}
@@ -591,7 +591,7 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 		str += new_filename + "\n" + sql.lastError().text();
 		throw std::exception(str.toStdString().c_str());
 	}
-	MakeTableSpecies(sql, db);
+	MakeTableSpecies(sql, db, dbel);
 	MakeTableTempRange(sql, db);
 	MakeTableColor(sql, dbcolor);
 	MakeTableCompositionsOfSpecies(sql, db, dbel);
