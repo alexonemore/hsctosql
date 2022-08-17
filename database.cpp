@@ -558,7 +558,7 @@ Units::Units(const QString& filename)
 		QTextStream stream(&file);
 		int id{1};
 		while(!stream.atEnd()) {
-			auto str = stream.readLine().split(".");
+			auto str = stream.readLine().split("\t");
 			auto name = str.at(0).trimmed();
 			auto unit_name = str.at(1).trimmed();
 			data.push_back(Unit{id++, name, unit_name});

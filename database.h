@@ -118,8 +118,8 @@ public:
 	void PrintNames(const QString& filename) const;
 	std::set<QString> GetElements() const;
 	std::set<QString> GetFormulasContainsElement(const QString& el) const;
-	auto cbegin() const { return data.cbegin(); }
-	auto cend() const { return data.cend(); }
+	auto begin() const { return data.begin(); }
+	auto end() const { return data.end(); }
 private:
 	void ParseFormulaToComposition();
 };
@@ -136,8 +136,8 @@ public:
 	DataReferences(const QString& filename);
 	void Print(const QString& filename) const;
 	QVector<QString> FindLongNames(const QString& short_name) const;
-	auto cbegin() const { return data.cbegin(); }
-	auto cend() const { return data.cend(); }
+	auto begin() const { return data.begin(); }
+	auto end() const { return data.end(); }
 };
 
 class Elements final
@@ -163,8 +163,8 @@ class Colors final
 public:
 	Colors(const QString& filename);
 	const QString& GetColorName(const int number) const;
-	auto cbegin() const { return data.cbegin(); }
-	auto cend() const { return data.cend(); }
+	auto begin() const { return data.begin(); }
+	auto end() const { return data.end(); }
 };
 
 class Units final
@@ -176,8 +176,8 @@ class Units final
 	QVector<Unit> data;
 public:
 	Units(const QString& filename);
-	auto cbegin() const { return data.cbegin(); }
-	auto cend() const { return data.cend(); }
+	auto begin() const { return data.begin(); }
+	auto end() const { return data.end(); }
 };
 
 void ParseFormula(const QString& formula, QString& suffix,

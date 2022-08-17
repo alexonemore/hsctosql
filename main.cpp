@@ -39,6 +39,7 @@ int main() try
 	DataReferences dbref("../hsc_data_references.txt");
 	Database db("../hsc_database.xml");
 	Colors dbcolor("../hsc_color_codes.txt");
+	Units dbunit("../hsc_units.txt");
 
 	CheckSuEqualNonSu(db);
 	CheckUnits(db);
