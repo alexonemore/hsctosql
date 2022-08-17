@@ -302,7 +302,9 @@ void ParseFormula(const QString& formula, QString& suffix,
 				ParseFormulaWithoutNestedBrackets(composition, m5, amount1);
 			}
 		} else {
-			if(QString(text.c_str()).contains('\'')) throw std::exception("contains \'");
+			if(QString(text.c_str()).contains('\'')) {
+				throw std::exception("contains \'");
+			}
 			ParseFormulaWithoutNestedBrackets(composition, text, amount1);
 		}
 	}
@@ -519,4 +521,46 @@ std::set<QString> Elements::GetElements() const
 		set.insert(i.at(1));
 	}
 	return set;
+}
+
+Colors::Colors(const QString& filename)
+{
+	QFile file(filename);
+	if(file.open(QIODevice::ReadOnly)) {
+		QTextStream stream(&file);
+		int id{1};
+		while(!stream.atEnd()) {
+			auto str = stream.readLine().split(".");
+			auto number = str.at(0).toInt();
+			auto name = str.at(1).trimmed();
+			data.push_back(Color{id++, number, name});
+		}
+		if(stream.status() != QTextStream::Ok) {
+			QString err("ERROR read file: ");
+			err += filename;
+			throw std::exception(err.toStdString().c_str());
+		}
+	}
+}
+
+const QString& Colors::GetColorName(const int number) const
+{
+	auto f = std::find_if(data.cbegin(), data.cend(), [number](const Color& c){
+		return number == c.number;
+	});
+	return f->name;
+}
+
+// ****************************************************************************
+// *****************************     To SQL       *****************************
+// ****************************************************************************
+
+void SaveToSql(const Database& db, const DataReferences& dbref,
+			   const Elements& dbel, const Colors& dbcolor)
+{
+
+
+
+
+
 }

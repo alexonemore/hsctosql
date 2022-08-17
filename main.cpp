@@ -38,6 +38,7 @@ int main() try
 	Elements dbel("../hsc_elements.txt");
 	DataReferences dbref("../hsc_data_references.txt");
 	Database db("../hsc_database.xml");
+	Colors dbcolor("../hsc_color_codes.txt");
 
 	CheckSuEqualNonSu(db);
 	CheckUnits(db);

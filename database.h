@@ -19,6 +19,7 @@
 #ifndef DATABASE_H
 #define DATABASE_H
 
+#include <QtSql>
 #include <QVector>
 #include <QString>
 #include <QHash>
@@ -27,6 +28,7 @@
 
 using Composition = std::unordered_map<QString, double>;
 
+#if 0
 enum class SubstanceType
 {
 	normal,		// no suffix
@@ -48,6 +50,7 @@ enum class SubstanceType
 	ion_gas
 
 };
+#endif
 
 struct HSCDBTempRange
 {
@@ -101,7 +104,9 @@ struct HSCDBSpecies
 	QVector<HSCDBTempRange> TempRange;
 	Composition composition; // parsed from Formula
 	QString suffix;
-	//SubstanceType type;
+#if 0
+	SubstanceType type;
+#endif
 };
 
 class Database final
@@ -150,11 +155,25 @@ public:
 	std::set<QString> GetElements() const;
 };
 
+class Colors
+{
+	struct Color {
+		int id, number;
+		QString name;
+	};
+	QVector<Color> data;
+public:
+	Colors(const QString& filename);
+	const QString& GetColorName(const int number) const;
+};
 
 void ParseFormula(const QString& formula, QString& suffix,
 					  Composition& composition);
 void ParseFormulaWithoutNestedBrackets(Composition& composition,
 						const std::string& text, const double amount1);
 void tests();
+
+void SaveToSql(const Database& db, const DataReferences& dbref,
+			   const Elements& dbel, const Colors& dbcolor);
 
 #endif // DATABASE_H
