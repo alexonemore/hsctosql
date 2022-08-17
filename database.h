@@ -190,6 +190,7 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 			   const Elements& dbel, const Colors& dbcolor,
 			   const Units& dbunit, const QString& filename);
 
+QSqlQuery MakeTable(const QSqlDatabase& sql, const QString& str0, const QString& str1);
 void MakeTableSpecies(const QSqlDatabase& sql, const Database& db);
 void MakeTableTempRange(const QSqlDatabase& sql, const Database& db);
 void MakeTableColor(const QSqlDatabase& sql, const Colors& dbcolor);

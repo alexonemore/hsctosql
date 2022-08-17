@@ -651,6 +651,17 @@ void MakeTableState(const QSqlDatabase& sql)
 	static QString str2("INSERT INTO State (state_id, Symbol, Name) "
 						"VALUES (%1, '%2', '%3');");
 
+	static QVector<QString> symbols{"g", "l", "s", "a", "?"};
+	static QVector<QString> names{"Gas", "Liquid", "Solid", "Aqueous", "Unknown"};
+
+	QSqlQuery query(MakeTable(sql, str0, str1));
+
+	for(int i = 0; i != symbols.size(); ++i) {
+		auto&& str = str2.arg(QString::number(i+1), symbols.at(i), names.at(i));
+		if(!query.exec(str)) {
+			throw std::exception(str.toStdString().c_str());
+		}
+	}
 }
 
 void MakeTableRefs(const QSqlDatabase& sql, const DataReferences& dbref)
@@ -663,18 +674,7 @@ void MakeTableRefs(const QSqlDatabase& sql, const DataReferences& dbref)
 	static QString str2("INSERT INTO Refs (ref_id, Name, Article) "
 						"VALUES (%1, '%2', '%3');");
 
-	QSqlQuery query(sql);
-	if(!query.exec(str0)) {
-		QString err("Unable to drop table Refs\n");
-		err += query.lastError().text();
-		throw std::exception(err.toStdString().c_str());
-	}
-
-	if(!query.exec(str1)) {
-		QString err("Unable to create table Refs\n");
-		err += query.lastError().text();
-		throw std::exception(err.toStdString().c_str());
-	}
+	QSqlQuery query(MakeTable(sql, str0, str1));
 
 	for(const auto& i : dbref) {
 		auto name = i.short_name;
@@ -692,4 +692,23 @@ void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db,
 									const DataReferences& dbref)
 {
 
+}
+
+QSqlQuery MakeTable(const QSqlDatabase& sql, const QString& str0,
+					const QString& str1)
+{
+	QSqlQuery query(sql);
+	if(!query.exec(str0)) {
+		QString err("Unable to drop table\n");
+		err += str0 + "\n";
+		err += query.lastError().text();
+		throw std::exception(err.toStdString().c_str());
+	}
+	if(!query.exec(str1)) {
+		QString err("Unable to create table\n");
+		err += str1 + "\n";
+		err += query.lastError().text();
+		throw std::exception(err.toStdString().c_str());
+	}
+	return query;
 }
