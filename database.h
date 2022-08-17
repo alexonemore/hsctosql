@@ -201,6 +201,6 @@ void MakeTableIsotopes(const QSqlDatabase& sql, const Elements& dbel);
 void MakeTableState(const QSqlDatabase& sql);
 void MakeTableRefs(const QSqlDatabase& sql, const DataReferences& dbref);
 void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db, const DataReferences& dbref);
-
+QString NewFilename(const QString& filename);
 
 #endif // DATABASE_H

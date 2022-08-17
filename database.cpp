@@ -579,16 +579,16 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 			   const Elements& dbel, const Colors& dbcolor, const Units& dbunit,
 			   const QString& filename)
 {
-	if(QFile::remove(filename)) {
-		std::cout << filename.toStdString() << " removed" << std::endl;
-	} else {
-		std::cout << filename.toStdString() << " not removed" << std::endl;
+	QString new_filename(filename);
+	while(QFile::exists(new_filename)) {
+		new_filename = NewFilename(new_filename);
 	}
+
 	QSqlDatabase sql = QSqlDatabase::addDatabase("QSQLITE");
-	sql.setDatabaseName(filename);
+	sql.setDatabaseName(new_filename);
 	if(!sql.open()) {
 		QString str("Cannot open Database file: ");
-		str += filename + "\n" + sql.lastError().text();
+		str += new_filename + "\n" + sql.lastError().text();
 		throw std::exception(str.toStdString().c_str());
 	}
 	MakeTableSpecies(sql, db);
@@ -602,6 +602,44 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 	MakeTableRefs(sql, dbref);
 	MakeTableTempRangeToReferences(sql, db, dbref);
 	sql.close();
+}
+
+QString NewFilename(const QString& filename)
+{
+	auto split1 = filename.split("/");
+	QStringList path;
+	std::copy_n(split1.begin(), split1.size()-1, std::back_inserter(path));
+	QString fname = split1.last();
+
+	auto split2 = fname.split(".");
+	QStringList name;
+	std::copy_n(split2.begin(), split2.size()-1, std::back_inserter(name));
+	QString extension(split2.size() < 2 ? "db" : split2.last());
+
+	auto split3 = name.join(".").split("_");
+	QStringList rname;
+	int number;
+	bool ok{false};
+	if(split3.size() < 2) {
+		number = 1;
+		rname = split3;
+	} else {
+		number = split3.last().toInt(&ok);
+		if(ok) {
+			++number;
+			std::copy_n(split3.begin(), split3.size()-1, std::back_inserter(rname));
+		} else {
+			number = 1;
+			rname = split3;
+		}
+	}
+
+	QString new_filename(path.join("/"));
+	new_filename += "/";
+	new_filename += rname.join("_");
+	new_filename += "_" + QString::number(number).rightJustified(3, '0');
+	new_filename += "." + extension;
+	return new_filename;
 }
 
 void MakeTableSpecies(const QSqlDatabase& sql, const Database& db)
