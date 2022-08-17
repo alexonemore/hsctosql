@@ -586,7 +586,65 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 		str += filename + "\n" + sql.lastError().text();
 		throw std::exception(str.toStdString().c_str());
 	}
+	MakeTableSpecies(db);
+	MakeTableTempRange(db);
+	MakeTableColor(dbcolor);
+	MakeTableCompositionsOfSpecies(db, dbel);
+	MakeTableElements(dbel);
+	MakeTableIonicRadiiInCrystalsOxidationState(dbel);
+	MakeTableIsotopes(dbel);
+	MakeTableState();
+	MakeTableReferences(dbref);
+	MakeTableTempRangeToReferences(db, dbref);
+	sql.close();
+}
 
+void MakeTableSpecies(const Database& db)
+{
 
+}
+
+void MakeTableTempRange(const Database& db)
+{
+
+}
+
+void MakeTableColor(const Colors& dbcolor)
+{
+
+}
+
+void MakeTableCompositionsOfSpecies(const Database& db, const Elements& dbel)
+{
+
+}
+
+void MakeTableElements(const Elements& dbel)
+{
+
+}
+
+void MakeTableIonicRadiiInCrystalsOxidationState(const Elements& dbel)
+{
+
+}
+
+void MakeTableIsotopes(const Elements& dbel)
+{
+
+}
+
+void MakeTableState()
+{
+
+}
+
+void MakeTableReferences(const DataReferences& dbref)
+{
+
+}
+
+void MakeTableTempRangeToReferences(const Database& db, const DataReferences& dbref)
+{
 
 }

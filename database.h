@@ -190,4 +190,16 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 			   const Elements& dbel, const Colors& dbcolor,
 			   const Units& dbunit, const QString& filename);
 
+void MakeTableSpecies(const Database& db);
+void MakeTableTempRange(const Database& db);
+void MakeTableColor(const Colors& dbcolor);
+void MakeTableCompositionsOfSpecies(const Database& db, const Elements& dbel);
+void MakeTableElements(const Elements& dbel);
+void MakeTableIonicRadiiInCrystalsOxidationState(const Elements& dbel);
+void MakeTableIsotopes(const Elements& dbel);
+void MakeTableState();
+void MakeTableReferences(const DataReferences& dbref);
+void MakeTableTempRangeToReferences(const Database& db, const DataReferences& dbref);
+
+
 #endif // DATABASE_H
