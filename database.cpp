@@ -594,7 +594,7 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 	MakeTableIonicRadiiInCrystalsOxidationState(dbel);
 	MakeTableIsotopes(dbel);
 	MakeTableState();
-	MakeTableReferences(dbref);
+	MakeTableRefs(sql, dbref);
 	MakeTableTempRangeToReferences(db, dbref);
 	sql.close();
 }
@@ -639,9 +639,39 @@ void MakeTableState()
 
 }
 
-void MakeTableReferences(const DataReferences& dbref)
+void MakeTableRefs(const QSqlDatabase& sql, const DataReferences& dbref)
 {
+	static QString str0("DROP TABLE IF EXISTS Refs");
+	static QString str1("CREATE TABLE IF NOT EXISTS Refs ( "
+						"ref_id INTEGER PRIMARY KEY NOT NULL, "
+						"Name TEXT NOT NULL, "
+						"Article TEXT NOT NULL);");
+	static QString str2("INSERT INTO Refs (ref_id, Name, Article) "
+						"VALUES (%1, '%2', '%3');");
 
+	QSqlQuery query(sql);
+	if(!query.exec(str0)) {
+		QString err("Unable to drop table Refs\n");
+		err += query.lastError().text();
+		throw std::exception(err.toStdString().c_str());
+	}
+
+	if(!query.exec(str1)) {
+		QString err("Unable to create table Refs\n");
+		err += query.lastError().text();
+		throw std::exception(err.toStdString().c_str());
+	}
+
+	for(const auto& i : dbref) {
+		auto name = i.short_name;
+		name.replace("'", "''");
+		auto article = i.long_name;
+		article.replace("'", "''");
+		auto&& str = str2.arg(QString::number(i.id), name, article);
+		if(!query.exec(str)) {
+			throw std::exception(str.toStdString().c_str());
+		}
+	}
 }
 
 void MakeTableTempRangeToReferences(const Database& db, const DataReferences& dbref)

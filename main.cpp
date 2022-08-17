@@ -20,6 +20,7 @@
 #include <iostream>
 #include <set>
 #include <map>
+#include <QTextCodec>
 
 // 28 HSC - Databases.pdf
 
@@ -35,6 +36,8 @@ void PrintNumberOfRanges(const Database& db);
 
 int main() try
 {
+	QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
+
 	Elements dbel("../hsc_elements.txt");
 	DataReferences dbref("../hsc_data_references.txt");
 	Database db("../hsc_database.xml");

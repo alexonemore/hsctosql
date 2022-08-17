@@ -198,7 +198,7 @@ void MakeTableElements(const Elements& dbel);
 void MakeTableIonicRadiiInCrystalsOxidationState(const Elements& dbel);
 void MakeTableIsotopes(const Elements& dbel);
 void MakeTableState();
-void MakeTableReferences(const DataReferences& dbref);
+void MakeTableRefs(const QSqlDatabase& sql, const DataReferences& dbref);
 void MakeTableTempRangeToReferences(const Database& db, const DataReferences& dbref);
 
 
