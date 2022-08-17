@@ -111,35 +111,33 @@ struct HSCDBSpecies
 
 class Database final
 {
-	using DatabaseImpl = QVector<HSCDBSpecies>;
-	DatabaseImpl db;
+	QVector<HSCDBSpecies> data;
 public:
 	Database(const QString& filename);
 	void Print(const QString& filename) const;
 	void PrintNames(const QString& filename) const;
 	std::set<QString> GetElements() const;
 	std::set<QString> GetFormulasContainsElement(const QString& el) const;
-	auto begin() const { return db.begin(); }
-	auto end() const { return db.end(); }
+	auto cbegin() const { return data.cbegin(); }
+	auto cend() const { return data.cend(); }
 private:
 	void ParseFormulaToComposition();
-
 };
 
 class DataReferences final
 {
-	struct DataReferencesItem
-	{
+	struct DataReferencesItem {
 		int id;
 		QString short_name;
 		QString long_name;
 	};
-	using DataReferencesImpl = QVector<DataReferencesItem>;
-	DataReferencesImpl db;
+	QVector<DataReferencesItem> data;
 public:
 	DataReferences(const QString& filename);
 	void Print(const QString& filename) const;
 	QVector<QString> FindLongNames(const QString& short_name) const;
+	auto cbegin() const { return data.cbegin(); }
+	auto cend() const { return data.cend(); }
 };
 
 class Elements final
@@ -155,7 +153,7 @@ public:
 	std::set<QString> GetElements() const;
 };
 
-class Colors
+class Colors final
 {
 	struct Color {
 		int id, number;
@@ -165,6 +163,21 @@ class Colors
 public:
 	Colors(const QString& filename);
 	const QString& GetColorName(const int number) const;
+	auto cbegin() const { return data.cbegin(); }
+	auto cend() const { return data.cend(); }
+};
+
+class Units final
+{
+	struct Unit {
+		int id;
+		QString name, unit_name;
+	};
+	QVector<Unit> data;
+public:
+	Units(const QString& filename);
+	auto cbegin() const { return data.cbegin(); }
+	auto cend() const { return data.cend(); }
 };
 
 void ParseFormula(const QString& formula, QString& suffix,

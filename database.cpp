@@ -56,54 +56,54 @@ Database::Database(const QString& filename)
 				continue;
 			}
 
-			if(!in_temp_range && name == QStringLiteral("HSCDBSpecies")) { db.push_back(HSCDBSpecies{}); }
-			else if(!in_temp_range && name == QStringLiteral("suHSCMP")) { db.last().suHSCMP = get_next_character(); }
-			else if(!in_temp_range && name == QStringLiteral("suHSCBP")) { db.last().suHSCBP = get_next_character(); }
-			else if(!in_temp_range && name == QStringLiteral("OriginDatabase")) { db.last().OriginDatabase = get_next_character(); }
-			else if(!in_temp_range && name == QStringLiteral("SaveDate")) { db.last().SaveDate = get_next_character(); }
-			else if(!in_temp_range && name == QStringLiteral("CAN")) { db.last().CAN = get_next_character(); }
-			else if(!in_temp_range && name == QStringLiteral("formula")) { db.last().formula = get_next_character(); }
-			else if(!in_temp_range && name == QStringLiteral("formulaS")) { db.last().formulaS = get_next_character(); }
-			else if(!in_temp_range && name == QStringLiteral("NameCh")) { db.last().NameCh = get_next_character(); }
-			else if(!in_temp_range && name == QStringLiteral("NameCo")) { db.last().NameCo = get_next_character(); }
-			else if(!in_temp_range && name == QStringLiteral("HSCMP")) { db.last().HSCMP = get_next_character(); }
-			else if(!in_temp_range && name == QStringLiteral("HSCBP")) { db.last().HSCBP = get_next_character(); }
-			else if(!in_temp_range && name == QStringLiteral("Unit")) { db.last().Unit = get_next_character(); }
-			else if(!in_temp_range && name == QStringLiteral("TemperatureUnit")) { db.last().TemperatureUnit = get_next_character(); }
+			if(!in_temp_range && name == QStringLiteral("HSCDBSpecies")) { data.push_back(HSCDBSpecies{}); }
+			else if(!in_temp_range && name == QStringLiteral("suHSCMP")) { data.last().suHSCMP = get_next_character(); }
+			else if(!in_temp_range && name == QStringLiteral("suHSCBP")) { data.last().suHSCBP = get_next_character(); }
+			else if(!in_temp_range && name == QStringLiteral("OriginDatabase")) { data.last().OriginDatabase = get_next_character(); }
+			else if(!in_temp_range && name == QStringLiteral("SaveDate")) { data.last().SaveDate = get_next_character(); }
+			else if(!in_temp_range && name == QStringLiteral("CAN")) { data.last().CAN = get_next_character(); }
+			else if(!in_temp_range && name == QStringLiteral("formula")) { data.last().formula = get_next_character(); }
+			else if(!in_temp_range && name == QStringLiteral("formulaS")) { data.last().formulaS = get_next_character(); }
+			else if(!in_temp_range && name == QStringLiteral("NameCh")) { data.last().NameCh = get_next_character(); }
+			else if(!in_temp_range && name == QStringLiteral("NameCo")) { data.last().NameCo = get_next_character(); }
+			else if(!in_temp_range && name == QStringLiteral("HSCMP")) { data.last().HSCMP = get_next_character(); }
+			else if(!in_temp_range && name == QStringLiteral("HSCBP")) { data.last().HSCBP = get_next_character(); }
+			else if(!in_temp_range && name == QStringLiteral("Unit")) { data.last().Unit = get_next_character(); }
+			else if(!in_temp_range && name == QStringLiteral("TemperatureUnit")) { data.last().TemperatureUnit = get_next_character(); }
 
 			else if(!in_temp_range && name == QStringLiteral("TempRange")) { in_temp_range = true; }
 
-			else if(in_temp_range && name == QStringLiteral("HSCDBTempRange")) { db.last().TempRange.push_back(HSCDBTempRange{}); }
+			else if(in_temp_range && name == QStringLiteral("HSCDBTempRange")) { data.last().TempRange.push_back(HSCDBTempRange{}); }
 
-			else if(in_temp_range && name == QStringLiteral("Unit")) { db.last().TempRange.last().Unit = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("TemperatureUnit")) { db.last().TempRange.last().TemperatureUnit = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("HSCTempIndex")) { db.last().TempRange.last().HSCTempIndex = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("Reference")) { db.last().TempRange.last().Reference = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("HSCT1")) { db.last().TempRange.last().HSCT1 = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("HSCT2")) { db.last().TempRange.last().HSCT2 = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("HSCH")) { db.last().TempRange.last().HSCH = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("HSCS")) { db.last().TempRange.last().HSCS = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("HSCA")) { db.last().TempRange.last().HSCA = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("HSCB")) { db.last().TempRange.last().HSCB = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("HSCC")) { db.last().TempRange.last().HSCC = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("HSCD")) { db.last().TempRange.last().HSCD = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("HSCE")) { db.last().TempRange.last().HSCE = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("HSCF")) { db.last().TempRange.last().HSCF = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("HSCDe")) { db.last().TempRange.last().HSCDe = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("HSCCo")) { db.last().TempRange.last().HSCCo = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("HSCSolu")) { db.last().TempRange.last().HSCSolu = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("HSCPhase")) { db.last().TempRange.last().HSCPhase = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("HSCCl")) { db.last().TempRange.last().HSCCl = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("suHSCT1")) { db.last().TempRange.last().suHSCT1 = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("suHSCT2")) { db.last().TempRange.last().suHSCT2 = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("suHSCH")) { db.last().TempRange.last().suHSCH = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("suHSCS")) { db.last().TempRange.last().suHSCS = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("suHSCA")) { db.last().TempRange.last().suHSCA = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("suHSCB")) { db.last().TempRange.last().suHSCB = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("suHSCC")) { db.last().TempRange.last().suHSCC = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("suHSCD")) { db.last().TempRange.last().suHSCD = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("suHSCE")) { db.last().TempRange.last().suHSCE = get_next_character(); }
-			else if(in_temp_range && name == QStringLiteral("suHSCF")) { db.last().TempRange.last().suHSCF = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("Unit")) { data.last().TempRange.last().Unit = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("TemperatureUnit")) { data.last().TempRange.last().TemperatureUnit = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("HSCTempIndex")) { data.last().TempRange.last().HSCTempIndex = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("Reference")) { data.last().TempRange.last().Reference = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("HSCT1")) { data.last().TempRange.last().HSCT1 = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("HSCT2")) { data.last().TempRange.last().HSCT2 = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("HSCH")) { data.last().TempRange.last().HSCH = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("HSCS")) { data.last().TempRange.last().HSCS = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("HSCA")) { data.last().TempRange.last().HSCA = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("HSCB")) { data.last().TempRange.last().HSCB = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("HSCC")) { data.last().TempRange.last().HSCC = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("HSCD")) { data.last().TempRange.last().HSCD = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("HSCE")) { data.last().TempRange.last().HSCE = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("HSCF")) { data.last().TempRange.last().HSCF = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("HSCDe")) { data.last().TempRange.last().HSCDe = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("HSCCo")) { data.last().TempRange.last().HSCCo = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("HSCSolu")) { data.last().TempRange.last().HSCSolu = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("HSCPhase")) { data.last().TempRange.last().HSCPhase = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("HSCCl")) { data.last().TempRange.last().HSCCl = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("suHSCT1")) { data.last().TempRange.last().suHSCT1 = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("suHSCT2")) { data.last().TempRange.last().suHSCT2 = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("suHSCH")) { data.last().TempRange.last().suHSCH = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("suHSCS")) { data.last().TempRange.last().suHSCS = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("suHSCA")) { data.last().TempRange.last().suHSCA = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("suHSCB")) { data.last().TempRange.last().suHSCB = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("suHSCC")) { data.last().TempRange.last().suHSCC = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("suHSCD")) { data.last().TempRange.last().suHSCD = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("suHSCE")) { data.last().TempRange.last().suHSCE = get_next_character(); }
+			else if(in_temp_range && name == QStringLiteral("suHSCF")) { data.last().TempRange.last().suHSCF = get_next_character(); }
 
 		} while(!sr.atEnd());
 		if(sr.hasError()) {
@@ -114,7 +114,7 @@ Database::Database(const QString& filename)
 		file.close();
 	}
 	int i{1};
-	for(auto&& d : db) {
+	for(auto&& d : data) {
 		d.id = i++;
 	}
 
@@ -127,7 +127,7 @@ void Database::Print(const QString& filename) const
 		QFile file(filename);
 		if(file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
 			QTextStream stream(&file);
-			for(auto&& i : db) {
+			for(auto&& i : data) {
 				stream << "id" << " " << i.id << "\n";
 				stream << "suHSCMP" << " " << i.suHSCMP << "\n";
 				stream << "suHSCBP" << " " << i.suHSCBP << "\n";
@@ -189,7 +189,7 @@ void Database::PrintNames(const QString& filename) const
 		QFile file(filename);
 		if(file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
 			QTextStream stream(&file);
-			for(auto&& i : db) {
+			for(auto&& i : data) {
 				stream << i.formula + QStringLiteral("\t[");
 				for(auto&& [element, amount] : i.composition) {
 					stream << element << QStringLiteral(":") << amount << QStringLiteral(" ");
@@ -205,7 +205,7 @@ void Database::PrintNames(const QString& filename) const
 std::set<QString> Database::GetElements() const
 {
 	std::set<QString> set;
-	for(const auto& i : db) {
+	for(const auto& i : data) {
 		for(const auto& j : i.composition) {
 			set.insert(j.first);
 		}
@@ -216,7 +216,7 @@ std::set<QString> Database::GetElements() const
 std::set<QString> Database::GetFormulasContainsElement(const QString& el) const
 {
 	std::set<QString> set;
-	for(const auto& i : db) {
+	for(const auto& i : data) {
 		if(i.composition.count(el)) set.insert(i.formula);
 	}
 	return set;
@@ -224,7 +224,7 @@ std::set<QString> Database::GetFormulasContainsElement(const QString& el) const
 
 void Database::ParseFormulaToComposition()
 {
-	for(auto&& i : db) {
+	for(auto&& i : data) {
 		ParseFormula(i.formula, i.suffix, i.composition);
 	}
 }
@@ -394,7 +394,7 @@ DataReferences::DataReferences(const QString& filename)
 		int i{1};
 		while(!stream.atEnd()) {
 			auto str = stream.readLine().split("\t");
-			db.push_back(DataReferencesItem{i++, str.at(0).trimmed(), str.at(1).trimmed()});
+			data.push_back(DataReferencesItem{i++, str.at(0).trimmed(), str.at(1).trimmed()});
 		}
 		if(stream.status() != QTextStream::Ok) {
 			QString err("ERROR read file: ");
@@ -411,7 +411,7 @@ void DataReferences::Print(const QString& filename) const
 		QFile file(filename);
 		if(file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
 			QTextStream stream(&file);
-			for(const auto& [number_, short_name_, long_name_] : db) {
+			for(const auto& [number_, short_name_, long_name_] : data) {
 				stream << number_ << "\t" << short_name_ << "\t" << long_name_ << "\n";
 			}
 		}
@@ -422,7 +422,7 @@ void DataReferences::Print(const QString& filename) const
 QVector<QString> DataReferences::FindLongNames(const QString& short_name) const
 {
 	QVector<QString> long_names_list;
-	for(const auto& [_, short_name_, long_name_] : db) {
+	for(const auto& [_, short_name_, long_name_] : data) {
 		if(short_name == short_name_) {
 			long_names_list.push_back(long_name_);
 		}
