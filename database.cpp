@@ -576,10 +576,14 @@ Units::Units(const QString& filename)
 // ****************************************************************************
 
 void SaveToSql(const Database& db, const DataReferences& dbref,
-			   const Elements& dbel, const Colors& dbcolor)
+			   const Elements& dbel, const Colors& dbcolor, const Units& dbunit,
+			   const QString& filename)
 {
-
-
+	QSqlDatabase sql = QSqlDatabase::addDatabase("QSQLITE");
+	sql.setDatabaseName(filename);
+	if(!sql.open()) {
+		throw std::exception("Cannot open Database file");
+	}
 
 
 

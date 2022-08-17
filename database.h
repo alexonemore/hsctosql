@@ -187,6 +187,7 @@ void ParseFormulaWithoutNestedBrackets(Composition& composition,
 void tests();
 
 void SaveToSql(const Database& db, const DataReferences& dbref,
-			   const Elements& dbel, const Colors& dbcolor);
+			   const Elements& dbel, const Colors& dbcolor,
+			   const Units& dbunit, const QString& filename);
 
 #endif // DATABASE_H

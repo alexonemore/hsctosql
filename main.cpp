@@ -44,6 +44,8 @@ int main() try
 	CheckSuEqualNonSu(db);
 	CheckUnits(db);
 
+	SaveToSql(db, dbref, dbel, dbcolor, dbunit, "../hsc_database.db");
+
 #ifndef NDEBUG
 	dbel.PrintProperties();
 	dbel.PrintPropertyUnits();
