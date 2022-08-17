@@ -581,7 +581,7 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 {
 	QString new_filename(filename);
 	while(QFile::exists(new_filename)) {
-		new_filename = NewFilename(new_filename);
+		new_filename = FilenameIncrement(new_filename);
 	}
 
 	QSqlDatabase sql = QSqlDatabase::addDatabase("QSQLITE");
@@ -604,7 +604,7 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 	sql.close();
 }
 
-QString NewFilename(const QString& filename)
+QString FilenameIncrement(const QString& filename, int precision)
 {
 	auto split1 = filename.split("/");
 	QStringList path;
@@ -613,8 +613,14 @@ QString NewFilename(const QString& filename)
 
 	auto split2 = fname.split(".");
 	QStringList name;
-	std::copy_n(split2.begin(), split2.size()-1, std::back_inserter(name));
-	QString extension(split2.size() < 2 ? "db" : split2.last());
+	QString extension;
+	if(split2.size() < 2) {
+		name = split2;
+		extension = "db";
+	} else {
+		std::copy_n(split2.begin(), split2.size()-1, std::back_inserter(name));
+		extension = split2.last();
+	}
 
 	auto split3 = name.join(".").split("_");
 	QStringList rname;
@@ -637,13 +643,42 @@ QString NewFilename(const QString& filename)
 	QString new_filename(path.join("/"));
 	new_filename += "/";
 	new_filename += rname.join("_");
-	new_filename += "_" + QString::number(number).rightJustified(3, '0');
+	new_filename += "_" + QString::number(number).rightJustified(precision, '0');
 	new_filename += "." + extension;
 	return new_filename;
 }
 
-void MakeTableSpecies(const QSqlDatabase& sql, const Database& db)
+void MakeTableSpecies(const QSqlDatabase& sql, const Database& db,
+					  const Elements& dbel)
 {
+	static QString str0("DROP TABLE IF EXISTS Species;");
+	static QString str1("CREATE TABLE IF NOT EXISTS Species ( "
+						"species_id         INTEGER PRIMARY KEY NOT NULL, "
+						"CAN                TEXT NOT NULL, "
+						"Formula            TEXT NOT NULL, "
+						"FormulaS           TEXT NOT NULL, "
+						"NameCh             TEXT NOT NULL, "
+						"NameCo             TEXT NOT NULL, "
+						"Suffix             TEXT NOT NULL, "
+						"TempRanges         INTEGER NOT NULL, "
+						"NumberOfElements   INTEGER NOT NULL, "
+						"MP                 REAL NOT NULL, "
+						"BP                 REAL NOT NULL, "
+						"Weight             REAL NOT NULL, "
+						"T_min              REAL NOT NULL, "
+						"T_max              REAL NOT NULL "
+						");");
+
+	static QString str2("INSERT INTO Species (species_id, CAN, Formula, "
+						"FormulaS, NameCh, NameCo, Suffix, TempRanges, "
+						"NumberOfElements, MP, BP, Weight, T_min, T_max) "
+						"VALUES (%1, '%2', '%3', '%4', '%5', '%6', '%7', "
+						"%8, %9, %10, %11, %12, %13, %14);");
+
+	QSqlQuery query(MakeTable(sql, str0, str1));
+
+
+
 
 }
 

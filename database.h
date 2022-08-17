@@ -191,7 +191,7 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 			   const Units& dbunit, const QString& filename);
 
 QSqlQuery MakeTable(const QSqlDatabase& sql, const QString& str0, const QString& str1);
-void MakeTableSpecies(const QSqlDatabase& sql, const Database& db);
+void MakeTableSpecies(const QSqlDatabase& sql, const Database& db, const Elements& dbel);
 void MakeTableTempRange(const QSqlDatabase& sql, const Database& db);
 void MakeTableColor(const QSqlDatabase& sql, const Colors& dbcolor);
 void MakeTableCompositionsOfSpecies(const QSqlDatabase& sql, const Database& db, const Elements& dbel);
@@ -201,6 +201,6 @@ void MakeTableIsotopes(const QSqlDatabase& sql, const Elements& dbel);
 void MakeTableState(const QSqlDatabase& sql);
 void MakeTableRefs(const QSqlDatabase& sql, const DataReferences& dbref);
 void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db, const DataReferences& dbref);
-QString NewFilename(const QString& filename);
+QString FilenameIncrement(const QString& filename, int precision = 3);
 
 #endif // DATABASE_H
