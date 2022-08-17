@@ -551,6 +551,26 @@ const QString& Colors::GetColorName(const int number) const
 	return f->name;
 }
 
+Units::Units(const QString& filename)
+{
+	QFile file(filename);
+	if(file.open(QIODevice::ReadOnly)) {
+		QTextStream stream(&file);
+		int id{1};
+		while(!stream.atEnd()) {
+			auto str = stream.readLine().split(".");
+			auto name = str.at(0).trimmed();
+			auto unit_name = str.at(1).trimmed();
+			data.push_back(Unit{id++, name, unit_name});
+		}
+		if(stream.status() != QTextStream::Ok) {
+			QString err("ERROR read file: ");
+			err += filename;
+			throw std::exception(err.toStdString().c_str());
+		}
+	}
+}
+
 // ****************************************************************************
 // *****************************     To SQL       *****************************
 // ****************************************************************************
