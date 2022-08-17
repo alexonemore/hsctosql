@@ -190,16 +190,16 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 			   const Elements& dbel, const Colors& dbcolor,
 			   const Units& dbunit, const QString& filename);
 
-void MakeTableSpecies(const Database& db);
-void MakeTableTempRange(const Database& db);
-void MakeTableColor(const Colors& dbcolor);
-void MakeTableCompositionsOfSpecies(const Database& db, const Elements& dbel);
-void MakeTableElements(const Elements& dbel);
-void MakeTableIonicRadiiInCrystalsOxidationState(const Elements& dbel);
-void MakeTableIsotopes(const Elements& dbel);
-void MakeTableState();
+void MakeTableSpecies(const QSqlDatabase& sql, const Database& db);
+void MakeTableTempRange(const QSqlDatabase& sql, const Database& db);
+void MakeTableColor(const QSqlDatabase& sql, const Colors& dbcolor);
+void MakeTableCompositionsOfSpecies(const QSqlDatabase& sql, const Database& db, const Elements& dbel);
+void MakeTableElements(const QSqlDatabase& sql, const Elements& dbel);
+void MakeTableIonicRadiiInCrystalsOxidationState(const QSqlDatabase& sql, const Elements& dbel);
+void MakeTableIsotopes(const QSqlDatabase& sql, const Elements& dbel);
+void MakeTableState(const QSqlDatabase& sql);
 void MakeTableRefs(const QSqlDatabase& sql, const DataReferences& dbref);
-void MakeTableTempRangeToReferences(const Database& db, const DataReferences& dbref);
+void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db, const DataReferences& dbref);
 
 
 #endif // DATABASE_H

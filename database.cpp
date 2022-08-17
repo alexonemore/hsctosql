@@ -591,57 +591,66 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 		str += filename + "\n" + sql.lastError().text();
 		throw std::exception(str.toStdString().c_str());
 	}
-	MakeTableSpecies(db);
-	MakeTableTempRange(db);
-	MakeTableColor(dbcolor);
-	MakeTableCompositionsOfSpecies(db, dbel);
-	MakeTableElements(dbel);
-	MakeTableIonicRadiiInCrystalsOxidationState(dbel);
-	MakeTableIsotopes(dbel);
-	MakeTableState();
+	MakeTableSpecies(sql, db);
+	MakeTableTempRange(sql, db);
+	MakeTableColor(sql, dbcolor);
+	MakeTableCompositionsOfSpecies(sql, db, dbel);
+	MakeTableElements(sql, dbel);
+	MakeTableIonicRadiiInCrystalsOxidationState(sql, dbel);
+	MakeTableIsotopes(sql, dbel);
+	MakeTableState(sql);
 	MakeTableRefs(sql, dbref);
-	MakeTableTempRangeToReferences(db, dbref);
+	MakeTableTempRangeToReferences(sql, db, dbref);
 	sql.close();
 }
 
-void MakeTableSpecies(const Database& db)
+void MakeTableSpecies(const QSqlDatabase& sql, const Database& db)
 {
 
 }
 
-void MakeTableTempRange(const Database& db)
+void MakeTableTempRange(const QSqlDatabase& sql, const Database& db)
 {
 
 }
 
-void MakeTableColor(const Colors& dbcolor)
+void MakeTableColor(const QSqlDatabase& sql, const Colors& dbcolor)
 {
 
 }
 
-void MakeTableCompositionsOfSpecies(const Database& db, const Elements& dbel)
+void MakeTableCompositionsOfSpecies(const QSqlDatabase& sql, const Database& db,
+									const Elements& dbel)
 {
 
 }
 
-void MakeTableElements(const Elements& dbel)
+void MakeTableElements(const QSqlDatabase& sql, const Elements& dbel)
 {
 
 }
 
-void MakeTableIonicRadiiInCrystalsOxidationState(const Elements& dbel)
+void MakeTableIonicRadiiInCrystalsOxidationState(const QSqlDatabase& sql,
+												 const Elements& dbel)
 {
 
 }
 
-void MakeTableIsotopes(const Elements& dbel)
+void MakeTableIsotopes(const QSqlDatabase& sql, const Elements& dbel)
 {
 
 }
 
-void MakeTableState()
+void MakeTableState(const QSqlDatabase& sql)
 {
 	static QString str0("DROP TABLE IF EXISTS State;");
+	static QString str1("CREATE TABLE IF NOT EXISTS State ("
+						"state_id INTEGER PRIMARY KEY NOT NULL, "
+						"Symbol TEXT NOT NULL, "
+						"Name TEXT NOT NULL);");
+	static QString str2("INSERT INTO State (state_id, Symbol, Name) "
+						"VALUES (%1, '%2', '%3');");
+
 }
 
 void MakeTableRefs(const QSqlDatabase& sql, const DataReferences& dbref)
@@ -679,7 +688,8 @@ void MakeTableRefs(const QSqlDatabase& sql, const DataReferences& dbref)
 	}
 }
 
-void MakeTableTempRangeToReferences(const Database& db, const DataReferences& dbref)
+void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db,
+									const DataReferences& dbref)
 {
 
 }
