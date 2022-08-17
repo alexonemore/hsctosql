@@ -582,7 +582,9 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 	QSqlDatabase sql = QSqlDatabase::addDatabase("QSQLITE");
 	sql.setDatabaseName(filename);
 	if(!sql.open()) {
-		throw std::exception("Cannot open Database file");
+		QString str("Cannot open Database file: ");
+		str += filename + "\n" + sql.lastError().text();
+		throw std::exception(str.toStdString().c_str());
 	}
 
 
