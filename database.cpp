@@ -579,6 +579,11 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 			   const Elements& dbel, const Colors& dbcolor, const Units& dbunit,
 			   const QString& filename)
 {
+	if(QFile::remove(filename)) {
+		std::cout << filename.toStdString() << " removed" << std::endl;
+	} else {
+		std::cout << filename.toStdString() << " not removed" << std::endl;
+	}
 	QSqlDatabase sql = QSqlDatabase::addDatabase("QSQLITE");
 	sql.setDatabaseName(filename);
 	if(!sql.open()) {
@@ -636,12 +641,12 @@ void MakeTableIsotopes(const Elements& dbel)
 
 void MakeTableState()
 {
-
+	static QString str0("DROP TABLE IF EXISTS State;");
 }
 
 void MakeTableRefs(const QSqlDatabase& sql, const DataReferences& dbref)
 {
-	static QString str0("DROP TABLE IF EXISTS Refs");
+	static QString str0("DROP TABLE IF EXISTS Refs;");
 	static QString str1("CREATE TABLE IF NOT EXISTS Refs ( "
 						"ref_id INTEGER PRIMARY KEY NOT NULL, "
 						"Name TEXT NOT NULL, "
