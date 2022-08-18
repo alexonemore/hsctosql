@@ -833,11 +833,79 @@ void MakeTableColor(const QSqlDatabase& sql, const Colors& dbcolor)
 void MakeTableCompositionsOfSpecies(const QSqlDatabase& sql, const Database& db,
 									const Elements& dbel)
 {
+	static QString str0("DROP TABLE IF EXISTS CompositionsOfSpecies;");
+	static QString str1("CREATE TABLE IF NOT EXISTS CompositionsOfSpecies ( "
+						"cmp_id           INTEGER PRIMARY KEY NOT NULL, "
+						"species_id       INTEGER NOT NULL, "
+						"element_id       INTEGER NOT NULL, "
+						"Amount           REAL NOT NULL"
+						");");
+	static QString str2("INSERT INTO CompositionsOfSpecies (cmp_id, "
+						"species_id, element_id, Amount) "
+						"VALUES (%1, %2, %3, %4);");
+	QSqlQuery query(MakeTable(sql, str0, str1));
+
+
+
 
 }
 
 void MakeTableElements(const QSqlDatabase& sql, const Elements& dbel)
 {
+	static QString str0("DROP TABLE IF EXISTS Elements;");
+	static QString str1("CREATE TABLE IF NOT EXISTS Elements ( "
+	"element_id                                 INTEGER PRIMARY KEY NOT NULL, "
+	"AtomicNumber                               INTEGER NOT NULL, "
+	"Symbol                                     TEXT NOT NULL, "
+	"Name                                       TEXT NOT NULL, "
+	"AtomicWeight                               REAL NOT NULL, "
+	"OxidationStatesMostStable                  TEXT NOT NULL, "
+	"OxidationStates                            TEXT NOT NULL, "
+	"Density                                    REAL NOT NULL, "
+	"ElectronConfiguration                      TEXT NOT NULL, "
+	"MeltingPoint                               REAL NOT NULL, "
+	"MeltingPointPressure                       REAL NOT NULL, "
+	"BoilingPoint                               REAL NOT NULL, "
+	"Electronegativity                          REAL NOT NULL, "
+	"HeatOfVaporization                         REAL NOT NULL, "
+	"HeatOfFusion                               REAL NOT NULL, "
+	"ElectricalConductivity                     REAL NOT NULL, "
+	"ThermalConductivity                        REAL NOT NULL, "
+	"SpecificHeatCapacity                       REAL NOT NULL, "
+	"FirstIonizationPotential                   REAL NOT NULL, "
+	"AtomicVolume                               REAL NOT NULL, "
+	"AtomicRadius                               REAL NOT NULL, "
+	"CovalentRadius                             REAL NOT NULL, "
+	"CrystalStructure                           TEXT NOT NULL, "
+	"AcidBaseProperties                         TEXT NOT NULL, "
+	"YearWhenDiscovered                         INTEGER NOT NULL, "
+	"Color                                      TEXT NOT NULL, "
+	"ColorRGBNumber                             INTEGER NOT NULL, "
+	"SolubilityInColdWater                      TEXT NOT NULL, "
+	"SolubilityInHotWater                       TEXT NOT NULL, "
+	"MagneticSusceptibility                     TEXT NOT NULL, "
+	"AtomicElectronAffinity                     TEXT NOT NULL, "
+	"LatticeParameterA                          TEXT NOT NULL, "
+	"LatticeParameterB                          TEXT NOT NULL, "
+	"LatticeParameterC                          TEXT NOT NULL, "
+	"ContentInTheEarthsCrust                    REAL NOT NULL, "
+	"ContentInTheSea                            REAL NOT NULL, "
+	"ContentInTheAir                            REAL NOT NULL, "
+	"Polarizability                             REAL NOT NULL, "
+	"EnthalpyOfFormationAt29815KGas             TEXT NOT NULL, "
+	"EnthalpyOfFormationAt29815KSolid           TEXT NOT NULL, "
+	"GibbsEnergyOfFormation29815KGas            TEXT NOT NULL, "
+	"GibbsEnergyOfFormation29815KSolid          TEXT NOT NULL, "
+	"StandardEntropy29815KGas                   TEXT NOT NULL, "
+	"StandardEntropy29815KSolid                 TEXT NOT NULL, "
+	"HeatCapacity29815KGas                      TEXT NOT NULL, "
+	"HeatCapacity29815KSolid                    TEXT NOT NULL, "
+	"LinearExpansion29815K                      REAL NOT NULL, "
+	"HalfLifeOfTheMostStabileNuclide            TEXT NOT NULL, "
+	"RecyclabilityUNEP                          REAL NOT NULL "
+	");");
+
+
 
 }
 
