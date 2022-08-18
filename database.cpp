@@ -742,7 +742,8 @@ void MakeTableSpecies(const QSqlDatabase& sql, const Database& db,
 							  formulas, namech, nameco, suffix).
 				arg(QString::number(species.TempRange.size()),
 					QString::number(species.composition.size()),
-					species.HSCMP, species.HSCBP,
+					QString::number(std::abs(species.HSCMP.toDouble()), 'g', 10),
+					QString::number(std::abs(species.HSCBP.toDouble()), 'g', 10),
 					QString::number(dbel.GetWeight(species.composition), 'g', 10),
 					min, max);
 		if(!query.exec(str)) {
