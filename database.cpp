@@ -438,6 +438,8 @@ Elements::Elements(const QString& filename)
 		while(!stream.atEnd()) {
 			auto str = stream.readLine().split("\t");
 			auto size = str.size();
+			// the loops below starts with 1 to get rid of first column that
+			// duplicates Symbol column
 			if(str.at(0) == "Property") {
 				properties.reserve(size-1);
 				for(int i = 1; i != size; ++i) {
@@ -469,6 +471,19 @@ Elements::Elements(const QString& filename)
 		}
 	}
 	file.close();
+
+	// make atomic_weight
+	if(properties.at(1) != "Symbol") {
+		throw std::exception("Symbol is not in col 1");
+	}
+	if(properties.at(3) != "Atomic Weight") {
+		throw std::exception("Atomic Weight is not in col 3");
+	}
+	bool ok{false};
+	for(auto&& i : values) {
+		atomic_weight[i.at(1)] = i.at(3).toDouble(&ok);
+		if(!ok) throw std::exception(i.at(2).toStdString().c_str());
+	}
 }
 
 void Elements::Print(const QString& filename) const
@@ -514,13 +529,24 @@ void Elements::PrintPropertyUnits() const
 
 std::set<QString> Elements::GetElements() const
 {
-	// Symbol = 1
-	if(properties.at(1) != "Symbol") throw std::exception("Symbol is not in col 1");
 	std::set<QString> set;
 	for(const auto& i : values) {
 		set.insert(i.at(1));
 	}
 	return set;
+}
+
+double Elements::GetWeight(const Composition& composition) const
+{
+
+
+	double weight{0.0};
+	for(const auto& [name, amount] : composition) {
+
+	}
+
+
+	return weight;
 }
 
 Colors::Colors(const QString& filename)
@@ -677,7 +703,10 @@ void MakeTableSpecies(const QSqlDatabase& sql, const Database& db,
 
 	QSqlQuery query(MakeTable(sql, str0, str1));
 
+	int i{1};
+	for(const auto& species : db) {
 
+	}
 
 
 }

@@ -32,5 +32,10 @@
 4. Ctrl-a -> paste in Notepad++
 5. Delete last line with Reference
 6. Save as "../hsc_elements.txt"
+
+7. Add D and T:
+D	1	D	Deuterium	2.01410177811																																																									
+T	1	T	Tritium	3.01604928																																																									
+
 ```
 

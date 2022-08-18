@@ -145,12 +145,14 @@ class Elements final
 	QVector<QString> properties;
 	QVector<QString> property_units;
 	QVector<QVector<QString>> values;
+	std::unordered_map<QString, double> atomic_weight;
 public:
 	Elements(const QString& filename);
 	void Print(const QString& filename) const;
 	void PrintProperties() const;
 	void PrintPropertyUnits() const;
 	std::set<QString> GetElements() const;
+	double GetWeight(const Composition& composition) const;
 };
 
 class Colors final
