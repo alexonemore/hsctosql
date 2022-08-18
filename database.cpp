@@ -766,7 +766,7 @@ void MakeTableTempRange(const QSqlDatabase& sql, const Database& db)
 						"D                  REAL NOT NULL, "
 						"E                  REAL NOT NULL, "
 						"F                  REAL NOT NULL, "
-						"Dencity            REAL NOT NULL, "
+						"Density            REAL NOT NULL, "
 						"Color              INTEGER NOT NULL, "
 						"Solubility         REAL NOT NULL, "
 						"Phase              TEXT NOT NULL, "
