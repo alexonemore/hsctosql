@@ -699,8 +699,45 @@ void MakeTableSpecies(const QSqlDatabase& sql, const Database& db,
 
 	QSqlQuery query(MakeTable(sql, str0, str1));
 
+	auto iminmax = [](const QVector<HSCDBTempRange>& tr) {
+		int imin{0}, imax{0}, icur{0};
+		bool ok{false};
+		double min = tr.at(0).HSCT1.toDouble(&ok);
+		if(!ok) throw std::exception(tr.at(0).HSCT1.toStdString().c_str());
+		double max = tr.at(0).HSCT2.toDouble(&ok);
+		if(!ok) throw std::exception(tr.at(0).HSCT2.toStdString().c_str());
+		for(const auto& i : tr) {
+			auto xmin = i.HSCT1.toDouble(&ok);
+			if(!ok) throw std::exception(i.HSCT1.toStdString().c_str());
+			auto xmax = i.HSCT2.toDouble(&ok);
+			if(!ok) throw std::exception(i.HSCT2.toStdString().c_str());
+			if(xmin < min) {
+				min = xmin;
+				imin = icur;
+			}
+			if(xmax > max) {
+				max = xmax;
+				imax = icur;
+			}
+			icur++;
+		}
+		return std::make_pair(imin, imax);
+	};
+
 	int i{1};
 	for(const auto& species : db) {
+		auto [imin, imax] = iminmax(species.TempRange);
+
+		auto suffix = species.suffix;
+		suffix.replace("'", "''");
+		auto&& str = str2.arg(QString::number(i++), species.CAN, species.formula,
+							  species.formulaS, species.NameCh, species.NameCo,
+							  suffix).
+				arg(QString::number(species.TempRange.size()),
+					QString::number(species.composition.size()),
+					species.HSCMP, species.HSCBP,
+					QString::number(dbel.GetWeight(species.composition)),
+					QString::number(min), QString::number(max));
 
 	}
 
