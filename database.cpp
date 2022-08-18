@@ -538,14 +538,10 @@ std::set<QString> Elements::GetElements() const
 
 double Elements::GetWeight(const Composition& composition) const
 {
-
-
 	double weight{0.0};
 	for(const auto& [name, amount] : composition) {
-
+		weight += atomic_weight.at(name) * amount;
 	}
-
-
 	return weight;
 }
 
