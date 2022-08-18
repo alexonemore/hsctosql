@@ -153,6 +153,8 @@ public:
 	void PrintPropertyUnits() const;
 	std::set<QString> GetElements() const;
 	double GetWeight(const Composition& composition) const;
+	auto begin() const { return values.begin(); }
+	auto end() const { return values.end(); }
 };
 
 class Colors final

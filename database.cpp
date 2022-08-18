@@ -935,6 +935,15 @@ void MakeTableElements(const QSqlDatabase& sql, const Elements& dbel)
 						"'%29', '%30', '%31', '%32', '%33', '%34', %35, %36, "
 						"%37, %38, '%39', '%40', '%41', '%42', '%43', '%44', "
 						"'%45', '%46', %47, '%48', %49);");
+	QSqlQuery query(MakeTable(sql, str0, str1));
+
+	int id{1};
+	for(const auto& i : dbel) {
+
+
+
+
+	}
 
 
 }
