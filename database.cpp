@@ -63,7 +63,7 @@ Database::Database(const QString& filename)
 			else if(!in_temp_range && name == QStringLiteral("SaveDate")) { data.last().SaveDate = get_next_character(); }
 			else if(!in_temp_range && name == QStringLiteral("CAN")) { data.last().CAN = get_next_character(); }
 			else if(!in_temp_range && name == QStringLiteral("formula")) { data.last().formula = get_next_character(); }
-			else if(!in_temp_range && name == QStringLiteral("formulaS")) { data.last().formulaS = get_next_character(); }
+			else if(!in_temp_range && name == QStringLiteral("FormulaS")) { data.last().formulaS = get_next_character(); }
 			else if(!in_temp_range && name == QStringLiteral("NameCh")) { data.last().NameCh = get_next_character(); }
 			else if(!in_temp_range && name == QStringLiteral("NameCo")) { data.last().NameCo = get_next_character(); }
 			else if(!in_temp_range && name == QStringLiteral("HSCMP")) { data.last().HSCMP = get_next_character(); }
