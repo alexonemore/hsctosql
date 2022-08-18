@@ -904,7 +904,37 @@ void MakeTableElements(const QSqlDatabase& sql, const Elements& dbel)
 	"HalfLifeOfTheMostStabileNuclide            TEXT NOT NULL, "
 	"RecyclabilityUNEP                          REAL NOT NULL "
 	");");
-
+	static QString str2("INSERT INTO CompositionsOfSpecies (element_id, "
+						"AtomicNumber, Symbol, Name, AtomicWeight, "
+						"OxidationStatesMostStable, OxidationStates, Density, "
+						"ElectronConfiguration, MeltingPoint, "
+						"MeltingPointPressure, BoilingPoint, "
+						"Electronegativity, HeatOfVaporization, HeatOfFusion, "
+						"ElectricalConductivity, ThermalConductivity, "
+						"SpecificHeatCapacity, FirstIonizationPotential, "
+						"AtomicVolume, AtomicRadius, CovalentRadius, "
+						"CrystalStructure, AcidBaseProperties, "
+						"YearWhenDiscovered, Color, ColorRGBNumber, "
+						"SolubilityInColdWater, SolubilityInHotWater, "
+						"MagneticSusceptibility, AtomicElectronAffinity, "
+						"LatticeParameterA, LatticeParameterB, "
+						"LatticeParameterC, ContentInTheEarthsCrust, "
+						"ContentInTheSea, ContentInTheAir, Polarizability, "
+						"EnthalpyOfFormationAt29815KGas, "
+						"EnthalpyOfFormationAt29815KSolid, "
+						"GibbsEnergyOfFormation29815KGas, "
+						"GibbsEnergyOfFormation29815KSolid, "
+						"StandardEntropy29815KGas, StandardEntropy29815KSolid, "
+						"HeatCapacity29815KGas, HeatCapacity29815KSolid, "
+						"LinearExpansion29815K, "
+						"HalfLifeOfTheMostStabileNuclide, "
+						"RecyclabilityUNEP) "
+						"VALUES (%1, %2, '%3', '%4', %5, '%6', '%7', %8, '%9', "
+						"%10, %11, %12, %13, %14, %15, %16, %17, %18, %19, "
+						"%20, %21, %22, '%23', '%24', %25, '%26', %27, '%28', "
+						"'%29', '%30', '%31', '%32', '%33', '%34', %35, %36, "
+						"%37, %38, '%39', '%40', '%41', '%42', '%43', '%44', "
+						"'%45', '%46', %47, '%48', %49);");
 
 
 }
