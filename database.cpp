@@ -721,7 +721,7 @@ void MakeTableSpecies(const QSqlDatabase& sql, const Database& db,
 		}
 		return std::make_pair(tr.at(imin).HSCT1, tr.at(imax).HSCT2);
 	};
-	int i{1};
+
 	for(const auto& species : db) {
 		auto [min, max] = minmax(species.TempRange);
 		auto formula = species.formula;
@@ -734,7 +734,7 @@ void MakeTableSpecies(const QSqlDatabase& sql, const Database& db,
 		nameco.replace("'", "''");
 		auto suffix = species.suffix;
 		suffix.replace("'", "''");
-		auto&& str = str2.arg(QString::number(i++),
+		auto&& str = str2.arg(QString::number(species.id),
 				species.CAN, formula, formulas, namech, nameco, suffix).
 				arg(QString::number(species.TempRange.size()),
 					QString::number(species.composition.size()),
@@ -772,7 +772,6 @@ void MakeTableTempRange(const QSqlDatabase& sql, const Database& db)
 						"Phase              TEXT NOT NULL, "
 						"ReliabilityClass   INTEGER NOT NULL "
 						");");
-
 	static QString str2("INSERT INTO TempRange (tr_id, species_id, TempIndex, "
 						"T1, T2, H, S, A, B, C, D, E, F, Density, Color, "
 						"Solubility, Phase, ReliabilityClass) "
@@ -780,11 +779,11 @@ void MakeTableTempRange(const QSqlDatabase& sql, const Database& db)
 						"%12, %13, %14, %15, %16, '%17', %18);");
 	QSqlQuery query(MakeTable(sql, str0, str1));
 
-	int tr_id{1}, species_id{1};
+	int tr_id{1};
 	for(const auto& species : db) {
 		for(const auto& temp_range : species.TempRange) {
 			auto&& str = str2.arg(QString::number(tr_id++),
-								  QString::number(species_id),
+								  QString::number(species.id),
 								  temp_range.HSCTempIndex,
 								  temp_range.HSCT1,
 								  temp_range.HSCT2,
@@ -806,13 +805,29 @@ void MakeTableTempRange(const QSqlDatabase& sql, const Database& db)
 				throw std::exception(str.toStdString().c_str());
 			}
 		}
-		species_id++;
 	}
 }
 
 void MakeTableColor(const QSqlDatabase& sql, const Colors& dbcolor)
 {
-
+	static QString str0("DROP TABLE IF EXISTS Color;");
+	static QString str1("CREATE TABLE IF NOT EXISTS Color ( "
+						"color_id           INTEGER PRIMARY KEY NOT NULL, "
+						"Number             INTEGER NOT NULL, "
+						"Name               TEXT NOT NULL "
+						");");
+	static QString str2("INSERT INTO Color (color_id, Number, Name) "
+						"VALUES (%1, %2, '%3');");
+	QSqlQuery query(MakeTable(sql, str0, str1));
+	for(const auto& i : dbcolor) {
+		auto&& str = str2.arg(QString::number(i.id),
+							  QString::number(i.number),
+							  i.name);
+		if(!query.exec(str)) {
+			str += "\n" + query.lastError().text();
+			throw std::exception(str.toStdString().c_str());
+		}
+	}
 }
 
 void MakeTableCompositionsOfSpecies(const QSqlDatabase& sql, const Database& db,
