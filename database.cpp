@@ -735,13 +735,13 @@ void MakeTableSpecies(const QSqlDatabase& sql, const Database& db,
 		auto suffix = species.suffix;
 		suffix.replace("'", "''");
 		auto&& str = str2.arg(QString::number(species.id),
-				species.CAN, formula, formulas, namech, nameco, suffix).
-				arg(QString::number(species.TempRange.size()),
-					QString::number(species.composition.size()),
-					QString::number(std::abs(species.HSCMP.toDouble()), 'g', 10),
-					QString::number(std::abs(species.HSCBP.toDouble()), 'g', 10),
-					QString::number(dbel.GetWeight(species.composition), 'g', 10),
-					min, max);
+				species.CAN, formula, formulas, namech, nameco, suffix,
+				QString::number(species.TempRange.size()),
+				QString::number(species.composition.size()),
+				QString::number(std::abs(species.HSCMP.toDouble()), 'g', 10),
+				QString::number(std::abs(species.HSCBP.toDouble()), 'g', 10),
+				QString::number(dbel.GetWeight(species.composition), 'g', 10),
+				min, max);
 		if(!query.exec(str)) {
 			str += "\n" + query.lastError().text();
 			throw std::exception(str.toStdString().c_str());
@@ -790,16 +790,16 @@ void MakeTableTempRange(const QSqlDatabase& sql, const Database& db)
 								  temp_range.HSCH,
 								  temp_range.HSCS,
 								  temp_range.HSCA,
-								  temp_range.HSCB).
-					arg(temp_range.HSCC,
-						temp_range.HSCD,
-						temp_range.HSCE,
-						temp_range.HSCF,
-						temp_range.HSCDe,
-						temp_range.HSCCo,
-						temp_range.HSCSolu,
-						temp_range.HSCPhase,
-						temp_range.HSCCl);
+								  temp_range.HSCB,
+								  temp_range.HSCC,
+								  temp_range.HSCD,
+								  temp_range.HSCE,
+								  temp_range.HSCF,
+								  temp_range.HSCDe,
+								  temp_range.HSCCo,
+								  temp_range.HSCSolu,
+								  temp_range.HSCPhase,
+								  temp_range.HSCCl);
 			if(!query.exec(str)) {
 				str += "\n" + query.lastError().text();
 				throw std::exception(str.toStdString().c_str());
@@ -1003,7 +1003,14 @@ n	properties	values.at(0)
 */
 	int element_id{1};
 	for(const auto& i : dbel) {
-
+		auto&& str = str2.arg(QString::number(element_id++), i.at(0), i.at(1),
+			i.at(2), i.at(3), i.at(4), i.at(5), i.at(6), i.at(7), i.at(8),
+			i.at(9), i.at(10), i.at(11), i.at(12), i.at(13), i.at(14), i.at(15),
+			i.at(16), i.at(17), i.at(18), i.at(19), i.at(20), i.at(21), i.at(22),
+			i.at(23), i.at(24), i.at(25), i.at(26), i.at(27), i.at(28), i.at(29),
+			i.at(37), i.at(38), i.at(39), i.at(40), i.at(41), i.at(42), i.at(43),
+			i.at(44), i.at(45), i.at(46), i.at(47), i.at(48), i.at(49), i.at(50),
+			i.at(51), i.at(52), i.at(53), i.at(60));
 
 
 
