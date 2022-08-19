@@ -146,6 +146,7 @@ class Elements final
 	QVector<QString> property_units;
 	QVector<QVector<QString>> values;
 	std::unordered_map<QString, double> atomic_weight;
+	std::unordered_map<QString, int> element_id;
 public:
 	Elements(const QString& filename);
 	void Print(const QString& filename) const;
@@ -153,6 +154,9 @@ public:
 	void PrintPropertyUnits() const;
 	std::set<QString> GetElements() const;
 	double GetWeight(const Composition& composition) const;
+	int GetElementId(const QString& element_symbol) const {
+		return element_id.at(element_symbol);
+	}
 	auto begin() const { return values.begin(); }
 	auto end() const { return values.end(); }
 };

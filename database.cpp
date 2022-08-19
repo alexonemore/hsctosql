@@ -484,6 +484,12 @@ Elements::Elements(const QString& filename)
 		atomic_weight[i.at(1)] = i.at(3).toDouble(&ok);
 		if(!ok) throw std::exception(i.at(2).toStdString().c_str());
 	}
+
+	// make element_id
+	int id{1};
+	for(const auto& v : values) {
+		element_id[v.at(1)] = id++;
+	}
 }
 
 void Elements::Print(const QString& filename) const
@@ -615,14 +621,14 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 	}
 //	MakeTableSpecies(sql, db, dbel);
 //	MakeTableTempRange(sql, db);
-//	MakeTableColor(sql, dbcolor);
-//	MakeTableCompositionsOfSpecies(sql, db, dbel);
+	MakeTableColor(sql, dbcolor);
+	MakeTableCompositionsOfSpecies(sql, db, dbel);
 	MakeTableElements(sql, dbel);
-//	MakeTableIonicRadiiInCrystalsOxidationState(sql, dbel);
-//	MakeTableIsotopes(sql, dbel);
-//	MakeTableState(sql);
-//	MakeTableRefs(sql, dbref);
-//	MakeTableTempRangeToReferences(sql, db, dbref);
+	MakeTableIonicRadiiInCrystalsOxidationState(sql, dbel);
+	MakeTableIsotopes(sql, dbel);
+	MakeTableState(sql);
+	MakeTableRefs(sql, dbref);
+	MakeTableTempRangeToReferences(sql, db, dbref);
 	sql.close();
 }
 
@@ -845,9 +851,20 @@ void MakeTableCompositionsOfSpecies(const QSqlDatabase& sql, const Database& db,
 						"VALUES (%1, %2, %3, %4);");
 	QSqlQuery query(MakeTable(sql, str0, str1));
 
-
-
-
+	int cmp_id{1};
+	for(const auto& species : db) {
+		auto species_id = QString::number(species.id);
+		for(const auto& [element, amount] : species.composition) {
+			auto&& str = str2.arg(QString::number(cmp_id++),
+								  species_id,
+								  QString::number(dbel.GetElementId(element)),
+								  QString::number(amount, 'g', 10));
+			if(!query.exec(str)) {
+				str += "\n" + query.lastError().text();
+				throw std::exception(str.toStdString().c_str());
+			}
+		}
+	}
 }
 
 void MakeTableElements(const QSqlDatabase& sql, const Elements& dbel)
@@ -1016,7 +1033,8 @@ n	properties	values.at(0)
 		}
 		if(i.at(60).isEmpty() || i.at(60) == "-") i[60] = "0";
 
-		auto&& str = str2.arg(QString::number(element_id++), i.at(0), i.at(1),
+		auto&& str = str2.arg(QString::number(dbel.GetElementId(el.at(1))),
+			i.at(0), i.at(1),
 			i.at(2), i.at(3), i.at(4), i.at(5), i.at(6), i.at(7), i.at(8),
 			i.at(9), i.at(10), i.at(11), i.at(12), i.at(13), i.at(14), i.at(15),
 			i.at(16), i.at(17), i.at(18), i.at(19), i.at(20), i.at(21),
