@@ -613,16 +613,16 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 		str += new_filename + "\n" + sql.lastError().text();
 		throw std::exception(str.toStdString().c_str());
 	}
-	MakeTableSpecies(sql, db, dbel);
-	MakeTableTempRange(sql, db);
-	MakeTableColor(sql, dbcolor);
-	MakeTableCompositionsOfSpecies(sql, db, dbel);
+//	MakeTableSpecies(sql, db, dbel);
+//	MakeTableTempRange(sql, db);
+//	MakeTableColor(sql, dbcolor);
+//	MakeTableCompositionsOfSpecies(sql, db, dbel);
 	MakeTableElements(sql, dbel);
-	MakeTableIonicRadiiInCrystalsOxidationState(sql, dbel);
-	MakeTableIsotopes(sql, dbel);
-	MakeTableState(sql);
-	MakeTableRefs(sql, dbref);
-	MakeTableTempRangeToReferences(sql, db, dbref);
+//	MakeTableIonicRadiiInCrystalsOxidationState(sql, dbel);
+//	MakeTableIsotopes(sql, dbel);
+//	MakeTableState(sql);
+//	MakeTableRefs(sql, dbref);
+//	MakeTableTempRangeToReferences(sql, db, dbref);
 	sql.close();
 }
 
@@ -904,7 +904,7 @@ void MakeTableElements(const QSqlDatabase& sql, const Elements& dbel)
 	"HalfLifeOfTheMostStabileNuclide            TEXT NOT NULL, "
 	"RecyclabilityUNEP                          REAL NOT NULL "
 	");");
-	static QString str2("INSERT INTO CompositionsOfSpecies (element_id, "
+	static QString str2("INSERT INTO Elements (element_id, "
 						"AtomicNumber, Symbol, Name, AtomicWeight, "
 						"OxidationStatesMostStable, OxidationStates, Density, "
 						"ElectronConfiguration, MeltingPoint, "
@@ -933,7 +933,7 @@ void MakeTableElements(const QSqlDatabase& sql, const Elements& dbel)
 						"%10, %11, %12, %13, %14, %15, %16, %17, %18, %19, "
 						"%20, %21, %22, '%23', '%24', %25, '%26', %27, '%28', "
 						"'%29', '%30', '%31', '%32', '%33', '%34', %35, %36, "
-						"%37, %38, '%39', '%40', '%41', '%42', '%43', '%44', "
+						"%37, '%38', '%39', '%40', '%41', '%42', '%43', '%44', "
 						"'%45', '%46', %47, '%48', %49);");
 	QSqlQuery query(MakeTable(sql, str0, str1));
 
@@ -1002,21 +1002,36 @@ n	properties	values.at(0)
 [60]	"Recyclability (UNEP)"	"0"
 */
 	int element_id{1};
-	for(const auto& i : dbel) {
+	for(const auto& el : dbel) {
+		auto i = el;
+		for(auto&& j : i) {
+			j.replace("'", "''");
+		}
+		for(int k = 3; k != 24; ++k) {
+			if(i.at(k).isEmpty() || i.at(k) == "-") i[k] = "0";
+		}
+		if(i.at(25).isEmpty() || i.at(25) == "-") i[25] = "0";
+		for(int k = 40; k != 54; ++k) {
+			if(i.at(k).isEmpty() || i.at(k) == "-") i[k] = "0";
+		}
+		if(i.at(60).isEmpty() || i.at(60) == "-") i[60] = "0";
+
 		auto&& str = str2.arg(QString::number(element_id++), i.at(0), i.at(1),
 			i.at(2), i.at(3), i.at(4), i.at(5), i.at(6), i.at(7), i.at(8),
 			i.at(9), i.at(10), i.at(11), i.at(12), i.at(13), i.at(14), i.at(15),
-			i.at(16), i.at(17), i.at(18), i.at(19), i.at(20), i.at(21), i.at(22),
-			i.at(23), i.at(24), i.at(25), i.at(26), i.at(27), i.at(28), i.at(29),
-			i.at(37), i.at(38), i.at(39), i.at(40), i.at(41), i.at(42), i.at(43),
-			i.at(44), i.at(45), i.at(46), i.at(47), i.at(48), i.at(49), i.at(50),
-			i.at(51), i.at(52), i.at(53), i.at(60));
+			i.at(16), i.at(17), i.at(18), i.at(19), i.at(20), i.at(21),
+			i.at(22), i.at(23), i.at(24), i.at(25), i.at(26), i.at(27),
+			i.at(28), i.at(29),
+			i.at(37), i.at(38), i.at(39), i.at(40), i.at(41), i.at(42),
+			i.at(43), i.at(44), i.at(45), i.at(46), i.at(47), i.at(48),
+			i.at(49), i.at(50), i.at(51), i.at(52), i.at(53),
+			i.at(60));
 
-
-
+		if(!query.exec(str)) {
+			str += "\n" + query.lastError().text();
+			throw std::exception(str.toStdString().c_str());
+		}
 	}
-
-
 }
 
 void MakeTableIonicRadiiInCrystalsOxidationState(const QSqlDatabase& sql,
