@@ -487,7 +487,7 @@ Elements::Elements(const QString& filename)
 
 	// make element_id
 	int id{1};
-	for(const auto& v : values) {
+	for(auto&& v : values) {
 		element_id[v.at(1)] = id++;
 	}
 }
@@ -621,9 +621,9 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 	}
 //	MakeTableSpecies(sql, db, dbel);
 //	MakeTableTempRange(sql, db);
-	MakeTableColor(sql, dbcolor);
-	MakeTableCompositionsOfSpecies(sql, db, dbel);
-	MakeTableElements(sql, dbel);
+//	MakeTableColor(sql, dbcolor);
+//	MakeTableCompositionsOfSpecies(sql, db, dbel);
+//	MakeTableElements(sql, dbel);
 	MakeTableIonicRadiiInCrystalsOxidationState(sql, dbel);
 	MakeTableIsotopes(sql, dbel);
 	MakeTableState(sql);
@@ -1018,7 +1018,6 @@ n	properties	values.at(0)
 [59]	""	""
 [60]	"Recyclability (UNEP)"	"0"
 */
-	int element_id{1};
 	for(const auto& el : dbel) {
 		auto i = el;
 		for(auto&& j : i) {
@@ -1055,7 +1054,30 @@ n	properties	values.at(0)
 void MakeTableIonicRadiiInCrystalsOxidationState(const QSqlDatabase& sql,
 												 const Elements& dbel)
 {
+	static QString str0("DROP TABLE IF EXISTS IonicRadiiInCrystalsOxidationState;");
+	static QString str1("CREATE TABLE IF NOT EXISTS IonicRadiiInCrystalsOxidationState ( "
+						"ionic_id         INTEGER PRIMARY KEY NOT NULL, "
+						"element_id       INTEGER NOT NULL, "
+						"Value            TEXT NOT NULL"
+						");");
+	static QString str2("INSERT INTO IonicRadiiInCrystalsOxidationState ("
+						"ionic_id, element_id, Value) "
+						"VALUES (%1, %2, '%3');");
+	QSqlQuery query(MakeTable(sql, str0, str1));
 
+	int ionic_id{1};
+	for(const auto& i : dbel) {
+		for(int j = 30; j != 37; ++j) {
+			if(i.at(j).isEmpty()) continue;
+			auto&& str = str2.arg(QString::number(ionic_id++),
+								  QString::number(dbel.GetElementId(i.at(1))),
+								  i.at(j));
+			if(!query.exec(str)) {
+				str += "\n" + query.lastError().text();
+				throw std::exception(str.toStdString().c_str());
+			}
+		}
+	}
 }
 
 void MakeTableIsotopes(const QSqlDatabase& sql, const Elements& dbel)
