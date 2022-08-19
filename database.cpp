@@ -394,7 +394,8 @@ DataReferences::DataReferences(const QString& filename)
 		int i{1};
 		while(!stream.atEnd()) {
 			auto str = stream.readLine().split("\t");
-			data.push_back(DataReferencesItem{i++, str.at(0).simplified(), str.at(1).simplified()});
+			data.push_back(DataReferencesItem{i++, str.at(0).simplified(),
+											  str.at(1).simplified()});
 		}
 		if(stream.status() != QTextStream::Ok) {
 			QString err("ERROR read file: ");
@@ -1117,9 +1118,9 @@ void MakeTableState(const QSqlDatabase& sql)
 {
 	static QString str0("DROP TABLE IF EXISTS State;");
 	static QString str1("CREATE TABLE IF NOT EXISTS State ("
-						"state_id INTEGER PRIMARY KEY NOT NULL, "
-						"Symbol TEXT NOT NULL, "
-						"Name TEXT NOT NULL);");
+						"state_id   INTEGER PRIMARY KEY NOT NULL, "
+						"Symbol     TEXT NOT NULL, "
+						"Name       TEXT NOT NULL);");
 	static QString str2("INSERT INTO State (state_id, Symbol, Name) "
 						"VALUES (%1, '%2', '%3');");
 
@@ -1141,9 +1142,9 @@ void MakeTableRefs(const QSqlDatabase& sql, const DataReferences& dbref)
 {
 	static QString str0("DROP TABLE IF EXISTS Refs;");
 	static QString str1("CREATE TABLE IF NOT EXISTS Refs ( "
-						"ref_id INTEGER PRIMARY KEY NOT NULL, "
-						"Name TEXT NOT NULL, "
-						"Article TEXT NOT NULL);");
+						"ref_id    INTEGER PRIMARY KEY NOT NULL, "
+						"Name      TEXT NOT NULL, "
+						"Article   TEXT NOT NULL);");
 	static QString str2("INSERT INTO Refs (ref_id, Name, Article) "
 						"VALUES (%1, '%2', '%3');");
 
@@ -1165,13 +1166,26 @@ void MakeTableRefs(const QSqlDatabase& sql, const DataReferences& dbref)
 void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db,
 									const DataReferences& dbref)
 {
+	static QString str0("DROP TABLE IF EXISTS TempRangeToReferences;");
+	static QString str1("CREATE TABLE IF NOT EXISTS TempRangeToReferences ( "
+						"trref_id       INTEGER PRIMARY KEY NOT NULL, "
+						"tr_id          INTEGER NOT NULL, "
+						"ref_id         INTEGER NOT NULL);");
+	static QString str2("INSERT INTO TempRangeToReferences (trref_id, tr_id, "
+						"ref_id) VALUES (%1, %2, %3);");
 
+	QSqlQuery query(MakeTable(sql, str0, str1));
 
+	int trref_id{1}, tr_id{1};
 	for(const auto& species : db) {
 		for(const auto& temp_range : species.TempRange) {
 			auto split = temp_range.Reference.split(";");
 			for(const auto& item : split) {
 				auto str = item.simplified();
+
+// names in Refs db are not unique
+
+
 			}
 		}
 	}
