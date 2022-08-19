@@ -32,7 +32,7 @@ Database::Database(const QString& filename)
 		auto get_next_character = [&sr](){
 			auto type = sr.readNext();
 			if(type == QXmlStreamReader::TokenType::Characters) {
-				return sr.text().toString().trimmed();
+				return sr.text().toString().simplified();
 			}
 			else if(type == QXmlStreamReader::TokenType::EndElement) {
 				return QString{};
@@ -394,7 +394,7 @@ DataReferences::DataReferences(const QString& filename)
 		int i{1};
 		while(!stream.atEnd()) {
 			auto str = stream.readLine().split("\t");
-			data.push_back(DataReferencesItem{i++, str.at(0).trimmed(), str.at(1).trimmed()});
+			data.push_back(DataReferencesItem{i++, str.at(0).simplified(), str.at(1).simplified()});
 		}
 		if(stream.status() != QTextStream::Ok) {
 			QString err("ERROR read file: ");
@@ -443,14 +443,14 @@ Elements::Elements(const QString& filename)
 			if(str.at(0) == "Property") {
 				properties.reserve(size-1);
 				for(int i = 1; i != size; ++i) {
-					properties.push_back(str.at(i).trimmed());
+					properties.push_back(str.at(i).simplified());
 				}
 				continue;
 			}
 			if(str.at(0) == "Units") {
 				property_units.reserve(size-1);
 				for(int i = 1; i != size; ++i) {
-					property_units.push_back(str.at(i).trimmed());
+					property_units.push_back(str.at(i).simplified());
 				}
 				continue;
 			}
@@ -461,7 +461,7 @@ Elements::Elements(const QString& filename)
 			auto&& last = values.last();
 			last.reserve(size-1);
 			for(int i = 1; i != size; ++i) {
-				last.push_back(str.at(i).trimmed());
+				last.push_back(str.at(i).simplified());
 			}
 		}
 		if(stream.status() != QTextStream::Ok) {
@@ -560,7 +560,7 @@ Colors::Colors(const QString& filename)
 		while(!stream.atEnd()) {
 			auto str = stream.readLine().split(".");
 			auto number = str.at(0).toInt();
-			auto name = str.at(1).trimmed();
+			auto name = str.at(1).simplified();
 			data.push_back(Color{id++, number, name});
 		}
 		if(stream.status() != QTextStream::Ok) {
@@ -587,8 +587,8 @@ Units::Units(const QString& filename)
 		int id{1};
 		while(!stream.atEnd()) {
 			auto str = stream.readLine().split("\t");
-			auto name = str.at(0).trimmed();
-			auto unit_name = str.at(1).trimmed();
+			auto name = str.at(0).simplified();
+			auto unit_name = str.at(1).simplified();
 			data.push_back(Unit{id++, name, unit_name});
 		}
 		if(stream.status() != QTextStream::Ok) {
@@ -625,9 +625,9 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 //	MakeTableCompositionsOfSpecies(sql, db, dbel);
 //	MakeTableElements(sql, dbel);
 //	MakeTableIonicRadiiInCrystalsOxidationState(sql, dbel);
-	MakeTableIsotopes(sql, dbel);
-	MakeTableState(sql);
-	MakeTableRefs(sql, dbref);
+//	MakeTableIsotopes(sql, dbel);
+//	MakeTableState(sql);
+//	MakeTableRefs(sql, dbref);
 	MakeTableTempRangeToReferences(sql, db, dbref);
 	sql.close();
 }
@@ -1102,7 +1102,9 @@ void MakeTableIsotopes(const QSqlDatabase& sql, const Elements& dbel)
 			auto split = i.at(j).split(",");
 			auto&& str = str2.arg(QString::number(isotopes_id++),
 								  QString::number(dbel.GetElementId(i.at(1))),
-								  split.at(0), split.at(1), split.at(2));
+								  split.at(0).simplified(),
+								  split.at(1).simplified(),
+								  split.at(2).simplified());
 			if(!query.exec(str)) {
 				str += "\n" + query.lastError().text();
 				throw std::exception(str.toStdString().c_str());
@@ -1164,6 +1166,15 @@ void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db,
 									const DataReferences& dbref)
 {
 
+
+	for(const auto& species : db) {
+		for(const auto& temp_range : species.TempRange) {
+			auto split = temp_range.Reference.split(";");
+			for(const auto& item : split) {
+				auto str = item.simplified();
+			}
+		}
+	}
 }
 
 QSqlQuery MakeTable(const QSqlDatabase& sql, const QString& str0,
