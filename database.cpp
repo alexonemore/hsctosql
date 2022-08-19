@@ -624,7 +624,7 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 //	MakeTableColor(sql, dbcolor);
 //	MakeTableCompositionsOfSpecies(sql, db, dbel);
 //	MakeTableElements(sql, dbel);
-	MakeTableIonicRadiiInCrystalsOxidationState(sql, dbel);
+//	MakeTableIonicRadiiInCrystalsOxidationState(sql, dbel);
 	MakeTableIsotopes(sql, dbel);
 	MakeTableState(sql);
 	MakeTableRefs(sql, dbref);
@@ -1082,7 +1082,33 @@ void MakeTableIonicRadiiInCrystalsOxidationState(const QSqlDatabase& sql,
 
 void MakeTableIsotopes(const QSqlDatabase& sql, const Elements& dbel)
 {
+	static QString str0("DROP TABLE IF EXISTS Isotopes;");
+	static QString str1("CREATE TABLE IF NOT EXISTS Isotopes ( "
+						"isotopes_id             INTEGER PRIMARY KEY NOT NULL, "
+						"element_id              INTEGER NOT NULL, "
+						"AtomicNumber            INTEGER NOT NULL, "
+						"RelativeAtomicWeight    REAL NOT NULL,"
+						"HalfLife                TEXT NOT NULL"
+						");");
+	static QString str2("INSERT INTO Isotopes (isotopes_id, element_id, "
+						"AtomicNumber, RelativeAtomicWeight, HalfLife) "
+						"VALUES (%1, %2, %3, %4, '%5');");
+	QSqlQuery query(MakeTable(sql, str0, str1));
 
+	int isotopes_id{1};
+	for(const auto& i : dbel) {
+		for(int j = 54; j != 60; ++j) {
+			if(i.at(j).isEmpty()) continue;
+			auto split = i.at(j).split(",");
+			auto&& str = str2.arg(QString::number(isotopes_id++),
+								  QString::number(dbel.GetElementId(i.at(1))),
+								  split.at(0), split.at(1), split.at(2));
+			if(!query.exec(str)) {
+				str += "\n" + query.lastError().text();
+				throw std::exception(str.toStdString().c_str());
+			}
+		}
+	}
 }
 
 void MakeTableState(const QSqlDatabase& sql)
