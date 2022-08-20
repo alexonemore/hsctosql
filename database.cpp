@@ -620,15 +620,15 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 		str += new_filename + "\n" + sql.lastError().text();
 		throw std::exception(str.toStdString().c_str());
 	}
-//	MakeTableSpecies(sql, db, dbel);
-//	MakeTableTempRange(sql, db);
-//	MakeTableColor(sql, dbcolor);
-//	MakeTableCompositionsOfSpecies(sql, db, dbel);
-//	MakeTableElements(sql, dbel);
-//	MakeTableIonicRadiiInCrystalsOxidationState(sql, dbel);
-//	MakeTableIsotopes(sql, dbel);
-//	MakeTableState(sql);
-//	MakeTableRefs(sql, dbref);
+	MakeTableSpecies(sql, db, dbel);
+	MakeTableTempRange(sql, db);
+	MakeTableColor(sql, dbcolor);
+	MakeTableCompositionsOfSpecies(sql, db, dbel);
+	MakeTableElements(sql, dbel);
+	MakeTableIonicRadiiInCrystalsOxidationState(sql, dbel);
+	MakeTableIsotopes(sql, dbel);
+	MakeTableState(sql);
+	MakeTableRefs(sql, dbref);
 	MakeTableTempRangeToReferences(sql, db, dbref);
 	sql.close();
 }
@@ -1170,9 +1170,9 @@ void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db,
 	static QString str1("CREATE TABLE IF NOT EXISTS TempRangeToReferences ( "
 						"trref_id       INTEGER PRIMARY KEY NOT NULL, "
 						"tr_id          INTEGER NOT NULL, "
-						"ref_id         INTEGER NOT NULL);");
+						"Name           TEXT NOT NULL);");
 	static QString str2("INSERT INTO TempRangeToReferences (trref_id, tr_id, "
-						"ref_id) VALUES (%1, %2, %3);");
+						"Name) VALUES (%1, %2, '%3');");
 
 	QSqlQuery query(MakeTable(sql, str0, str1));
 
@@ -1181,13 +1181,17 @@ void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db,
 		for(const auto& temp_range : species.TempRange) {
 			auto split = temp_range.Reference.split(";");
 			for(const auto& item : split) {
-				auto str = item.simplified();
-
-// names in Refs db are not unique
-
-
+				auto Name = item.simplified();
+				auto str = str2.arg(QString::number(trref_id++),
+									QString::number(tr_id),
+									Name);
+				if(!query.exec(str)) {
+					str += "\n" + query.lastError().text();
+					throw std::exception(str.toStdString().c_str());
+				}
 			}
-		}
+			tr_id++;
+		}		
 	}
 }
 
