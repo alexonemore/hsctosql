@@ -22,7 +22,6 @@
 #include <regex>
 #include <iostream>
 #include <exception>
-#include <utilities.h>
 
 Database::Database(const QString& filename)
 {
@@ -1169,6 +1168,7 @@ void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db,
 			auto split = tmp.split(";");
 			for(const auto& item : split) {
 				auto Name = item.simplified();
+				if(Name.isEmpty()) continue;
 				Name.replace("'", "''");
 				auto str = str2.arg(QString::number(trref_id++),
 									QString::number(tr_id),

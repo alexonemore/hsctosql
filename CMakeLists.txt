@@ -40,10 +40,6 @@ endif()
 add_executable(hsctosql
   main.cpp
   database.h database.cpp
-
-  # misc
-  misc/utilities.h
-  misc/utilities.cpp
 )
 
 target_link_libraries(hsctosql Qt${QT_VERSION_MAJOR}::Core)
@@ -53,7 +49,3 @@ target_link_libraries(hsctosql Qt${QT_VERSION_MAJOR}::Sql)
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 	target_link_libraries(hsctosql Qt6::Core5Compat)
 endif()
-
-target_include_directories(${PROJECT_NAME}
-	PRIVATE ${CMAKE_SOURCE_DIR}/misc
-)
