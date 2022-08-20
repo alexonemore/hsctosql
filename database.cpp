@@ -620,15 +620,15 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 		str += new_filename + "\n" + sql.lastError().text();
 		throw std::exception(str.toStdString().c_str());
 	}
-	MakeTableSpecies(sql, db, dbel);
-	MakeTableTempRange(sql, db);
-	MakeTableColor(sql, dbcolor);
-	MakeTableCompositionsOfSpecies(sql, db, dbel);
-	MakeTableElements(sql, dbel);
-	MakeTableIonicRadiiInCrystalsOxidationState(sql, dbel);
-	MakeTableIsotopes(sql, dbel);
-	MakeTableState(sql);
-	MakeTableRefs(sql, dbref);
+//	MakeTableSpecies(sql, db, dbel);
+//	MakeTableTempRange(sql, db);
+//	MakeTableColor(sql, dbcolor);
+//	MakeTableCompositionsOfSpecies(sql, db, dbel);
+//	MakeTableElements(sql, dbel);
+//	MakeTableIonicRadiiInCrystalsOxidationState(sql, dbel);
+//	MakeTableIsotopes(sql, dbel);
+//	MakeTableState(sql);
+//	MakeTableRefs(sql, dbref);
 	MakeTableTempRangeToReferences(sql, db, dbref);
 	sql.close();
 }
@@ -1179,7 +1179,9 @@ void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db,
 	int trref_id{1}, tr_id{1};
 	for(const auto& species : db) {
 		for(const auto& temp_range : species.TempRange) {
-			auto split = temp_range.Reference.split(";");
+			auto tmp = temp_range.Reference;
+			tmp.replace(",", ";");
+			auto split = tmp.split(";");
 			for(const auto& item : split) {
 				auto Name = item.simplified();
 				Name.replace("'", "''");
