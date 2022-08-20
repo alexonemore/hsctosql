@@ -22,6 +22,7 @@
 #include <regex>
 #include <iostream>
 #include <exception>
+#include <utilities.h>
 
 Database::Database(const QString& filename)
 {
@@ -38,7 +39,11 @@ Database::Database(const QString& filename)
 				return QString{};
 			} else {
 				QString str("ERROR get_next_character: ");
-				str += sr.tokenString() + " " + sr.name() + " " + sr.text();
+				str += sr.tokenString();
+				str += QStringLiteral(" ");
+				str += sr.name();
+				str += QStringLiteral(" ");
+				str += sr.text();
 				throw std::exception(str.toStdString().c_str());
 			}
 		};
@@ -620,15 +625,15 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 		str += new_filename + "\n" + sql.lastError().text();
 		throw std::exception(str.toStdString().c_str());
 	}
-//	MakeTableSpecies(sql, db, dbel);
-//	MakeTableTempRange(sql, db);
-//	MakeTableColor(sql, dbcolor);
-//	MakeTableCompositionsOfSpecies(sql, db, dbel);
-//	MakeTableElements(sql, dbel);
-//	MakeTableIonicRadiiInCrystalsOxidationState(sql, dbel);
-//	MakeTableIsotopes(sql, dbel);
-//	MakeTableState(sql);
-//	MakeTableRefs(sql, dbref);
+	MakeTableSpecies(sql, db, dbel);
+	MakeTableTempRange(sql, db);
+	MakeTableColor(sql, dbcolor);
+	MakeTableCompositionsOfSpecies(sql, db, dbel);
+	MakeTableElements(sql, dbel);
+	MakeTableIonicRadiiInCrystalsOxidationState(sql, dbel);
+	MakeTableIsotopes(sql, dbel);
+	MakeTableState(sql);
+	MakeTableRefs(sql, dbref);
 	MakeTableTempRangeToReferences(sql, db, dbref);
 	sql.close();
 }
@@ -702,7 +707,7 @@ void MakeTableSpecies(const QSqlDatabase& sql, const Database& db,
 						"NumberOfElements, MP, BP, Weight, T_min, T_max) "
 						"VALUES (%1, '%2', '%3', '%4', '%5', '%6', '%7', "
 						"%8, %9, %10, %11, %12, %13, %14);");
-	QSqlQuery query(MakeTable(sql, str0, str1));
+	QVector<QString> vecstr;
 
 	auto minmax = [](const QVector<HSCDBTempRange>& tr) {
 		int imin{0}, imax{0}, icur{0};
@@ -749,11 +754,9 @@ void MakeTableSpecies(const QSqlDatabase& sql, const Database& db,
 				QString::number(std::abs(species.HSCBP.toDouble()), 'g', 10),
 				QString::number(dbel.GetWeight(species.composition), 'g', 10),
 				min, max);
-		if(!query.exec(str)) {
-			str += "\n" + query.lastError().text();
-			throw std::exception(str.toStdString().c_str());
-		}
+		vecstr.push_back(str);
 	}
+	SqlTransaction(MakeTable(sql, str0, str1), vecstr);
 }
 
 void MakeTableTempRange(const QSqlDatabase& sql, const Database& db)
@@ -784,7 +787,7 @@ void MakeTableTempRange(const QSqlDatabase& sql, const Database& db)
 						"Solubility, Phase, ReliabilityClass) "
 						"VALUES (%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, "
 						"%12, %13, %14, %15, %16, '%17', %18);");
-	QSqlQuery query(MakeTable(sql, str0, str1));
+	QVector<QString> vecstr;
 
 	int tr_id{1};
 	for(const auto& species : db) {
@@ -807,12 +810,10 @@ void MakeTableTempRange(const QSqlDatabase& sql, const Database& db)
 								  temp_range.HSCSolu,
 								  temp_range.HSCPhase,
 								  temp_range.HSCCl);
-			if(!query.exec(str)) {
-				str += "\n" + query.lastError().text();
-				throw std::exception(str.toStdString().c_str());
-			}
+			vecstr.push_back(str);
 		}
 	}
+	SqlTransaction(MakeTable(sql, str0, str1), vecstr);
 }
 
 void MakeTableColor(const QSqlDatabase& sql, const Colors& dbcolor)
@@ -825,16 +826,14 @@ void MakeTableColor(const QSqlDatabase& sql, const Colors& dbcolor)
 						");");
 	static QString str2("INSERT INTO Color (color_id, Number, Name) "
 						"VALUES (%1, %2, '%3');");
-	QSqlQuery query(MakeTable(sql, str0, str1));
+	QVector<QString> vecstr;
 	for(const auto& i : dbcolor) {
 		auto&& str = str2.arg(QString::number(i.id),
 							  QString::number(i.number),
 							  i.name);
-		if(!query.exec(str)) {
-			str += "\n" + query.lastError().text();
-			throw std::exception(str.toStdString().c_str());
-		}
+		vecstr.push_back(str);
 	}
+	SqlTransaction(MakeTable(sql, str0, str1), vecstr);
 }
 
 void MakeTableCompositionsOfSpecies(const QSqlDatabase& sql, const Database& db,
@@ -850,7 +849,7 @@ void MakeTableCompositionsOfSpecies(const QSqlDatabase& sql, const Database& db,
 	static QString str2("INSERT INTO CompositionsOfSpecies (cmp_id, "
 						"species_id, element_id, Amount) "
 						"VALUES (%1, %2, %3, %4);");
-	QSqlQuery query(MakeTable(sql, str0, str1));
+	QVector<QString> vecstr;
 
 	int cmp_id{1};
 	for(const auto& species : db) {
@@ -860,12 +859,10 @@ void MakeTableCompositionsOfSpecies(const QSqlDatabase& sql, const Database& db,
 								  species_id,
 								  QString::number(dbel.GetElementId(element)),
 								  QString::number(amount, 'g', 10));
-			if(!query.exec(str)) {
-				str += "\n" + query.lastError().text();
-				throw std::exception(str.toStdString().c_str());
-			}
+			vecstr.push_back(str);
 		}
 	}
+	SqlTransaction(MakeTable(sql, str0, str1), vecstr);
 }
 
 void MakeTableElements(const QSqlDatabase& sql, const Elements& dbel)
@@ -953,7 +950,7 @@ void MakeTableElements(const QSqlDatabase& sql, const Elements& dbel)
 						"'%29', '%30', '%31', '%32', '%33', '%34', %35, %36, "
 						"%37, '%38', '%39', '%40', '%41', '%42', '%43', '%44', "
 						"'%45', '%46', %47, '%48', %49);");
-	QSqlQuery query(MakeTable(sql, str0, str1));
+	QVector<QString> vecstr;
 
 /*
 n	properties	values.at(0)
@@ -1045,11 +1042,9 @@ n	properties	values.at(0)
 			i.at(49), i.at(50), i.at(51), i.at(52), i.at(53),
 			i.at(60));
 
-		if(!query.exec(str)) {
-			str += "\n" + query.lastError().text();
-			throw std::exception(str.toStdString().c_str());
-		}
+		vecstr.push_back(str);
 	}
+	SqlTransaction(MakeTable(sql, str0, str1), vecstr);
 }
 
 void MakeTableIonicRadiiInCrystalsOxidationState(const QSqlDatabase& sql,
@@ -1064,7 +1059,7 @@ void MakeTableIonicRadiiInCrystalsOxidationState(const QSqlDatabase& sql,
 	static QString str2("INSERT INTO IonicRadiiInCrystalsOxidationState ("
 						"ionic_id, element_id, Value) "
 						"VALUES (%1, %2, '%3');");
-	QSqlQuery query(MakeTable(sql, str0, str1));
+	QVector<QString> vecstr;
 
 	int ionic_id{1};
 	for(const auto& i : dbel) {
@@ -1073,12 +1068,10 @@ void MakeTableIonicRadiiInCrystalsOxidationState(const QSqlDatabase& sql,
 			auto&& str = str2.arg(QString::number(ionic_id++),
 								  QString::number(dbel.GetElementId(i.at(1))),
 								  i.at(j));
-			if(!query.exec(str)) {
-				str += "\n" + query.lastError().text();
-				throw std::exception(str.toStdString().c_str());
-			}
+			vecstr.push_back(str);
 		}
 	}
+	SqlTransaction(MakeTable(sql, str0, str1), vecstr);
 }
 
 void MakeTableIsotopes(const QSqlDatabase& sql, const Elements& dbel)
@@ -1094,7 +1087,7 @@ void MakeTableIsotopes(const QSqlDatabase& sql, const Elements& dbel)
 	static QString str2("INSERT INTO Isotopes (isotopes_id, element_id, "
 						"AtomicNumber, RelativeAtomicWeight, HalfLife) "
 						"VALUES (%1, %2, %3, %4, '%5');");
-	QSqlQuery query(MakeTable(sql, str0, str1));
+	QVector<QString> vecstr;
 
 	int isotopes_id{1};
 	for(const auto& i : dbel) {
@@ -1106,12 +1099,10 @@ void MakeTableIsotopes(const QSqlDatabase& sql, const Elements& dbel)
 								  split.at(0).simplified(),
 								  split.at(1).simplified(),
 								  split.at(2).simplified());
-			if(!query.exec(str)) {
-				str += "\n" + query.lastError().text();
-				throw std::exception(str.toStdString().c_str());
-			}
+			vecstr.push_back(str);
 		}
 	}
+	SqlTransaction(MakeTable(sql, str0, str1), vecstr);
 }
 
 void MakeTableState(const QSqlDatabase& sql)
@@ -1127,15 +1118,13 @@ void MakeTableState(const QSqlDatabase& sql)
 	static QVector<QString> symbols{"g", "l", "s", "a", "?"};
 	static QVector<QString> names{"Gas", "Liquid", "Solid", "Aqueous", "Unknown"};
 
-	QSqlQuery query(MakeTable(sql, str0, str1));
+	QVector<QString> vecstr;
 
 	for(int i = 0; i != symbols.size(); ++i) {
 		auto&& str = str2.arg(QString::number(i+1), symbols.at(i), names.at(i));
-		if(!query.exec(str)) {
-			str += "\n" + query.lastError().text();
-			throw std::exception(str.toStdString().c_str());
-		}
+		vecstr.push_back(str);
 	}
+	SqlTransaction(MakeTable(sql, str0, str1), vecstr);
 }
 
 void MakeTableRefs(const QSqlDatabase& sql, const DataReferences& dbref)
@@ -1148,7 +1137,7 @@ void MakeTableRefs(const QSqlDatabase& sql, const DataReferences& dbref)
 	static QString str2("INSERT INTO Refs (ref_id, Name, Article) "
 						"VALUES (%1, '%2', '%3');");
 
-	QSqlQuery query(MakeTable(sql, str0, str1));
+	QVector<QString> vecstr;
 
 	for(const auto& i : dbref) {
 		auto name = i.short_name;
@@ -1156,11 +1145,9 @@ void MakeTableRefs(const QSqlDatabase& sql, const DataReferences& dbref)
 		auto article = i.long_name;
 		article.replace("'", "''");
 		auto&& str = str2.arg(QString::number(i.id), name, article);
-		if(!query.exec(str)) {
-			str += "\n" + query.lastError().text();
-			throw std::exception(str.toStdString().c_str());
-		}
+		vecstr.push_back(str);
 	}
+	SqlTransaction(MakeTable(sql, str0, str1), vecstr);
 }
 
 void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db,
@@ -1173,9 +1160,7 @@ void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db,
 						"Name           TEXT NOT NULL);");
 	static QString str2("INSERT INTO TempRangeToReferences (trref_id, tr_id, "
 						"Name) VALUES (%1, %2, '%3');");
-
-	QSqlQuery query(MakeTable(sql, str0, str1));
-
+	QVector<QString> vecstr;
 	int trref_id{1}, tr_id{1};
 	for(const auto& species : db) {
 		for(const auto& temp_range : species.TempRange) {
@@ -1188,14 +1173,12 @@ void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db,
 				auto str = str2.arg(QString::number(trref_id++),
 									QString::number(tr_id),
 									Name);
-				if(!query.exec(str)) {
-					str += "\n" + query.lastError().text();
-					throw std::exception(str.toStdString().c_str());
-				}
+				vecstr.push_back(str);
 			}
 			tr_id++;
 		}		
 	}
+	SqlTransaction(MakeTable(sql, str0, str1), vecstr);
 }
 
 QSqlQuery MakeTable(const QSqlDatabase& sql, const QString& str0,
@@ -1215,4 +1198,22 @@ QSqlQuery MakeTable(const QSqlDatabase& sql, const QString& str0,
 		throw std::exception(err.toStdString().c_str());
 	}
 	return query;
+}
+
+void SqlTransaction(QSqlQuery&& query, const QVector<QString>& vecstr)
+{
+	if(!query.exec("BEGIN TRANSACTION")) {
+		auto s = query.lastError().text();
+		throw std::exception(s.toStdString().c_str());
+	}
+	for(const auto& str : vecstr) {
+		if(!query.exec(str)) {
+			auto s = str + QStringLiteral("\n") + query.lastError().text();
+			throw std::exception(s.toStdString().c_str());
+		}
+	}
+	if(!query.exec("END TRANSACTION")) {
+		auto s = query.lastError().text();
+		throw std::exception(s.toStdString().c_str());
+	}
 }

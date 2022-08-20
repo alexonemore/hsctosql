@@ -210,5 +210,6 @@ void MakeTableState(const QSqlDatabase& sql);
 void MakeTableRefs(const QSqlDatabase& sql, const DataReferences& dbref);
 void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db, const DataReferences& dbref);
 QString FilenameIncrement(const QString& filename, int precision = 3);
+void SqlTransaction(QSqlQuery&& query, const QVector<QString>& vecstr);
 
 #endif // DATABASE_H

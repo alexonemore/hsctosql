@@ -33,11 +33,27 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Xml Sql)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Xml Sql)
 
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+	find_package(Qt6 REQUIRED COMPONENTS Core5Compat)
+endif()
+
 add_executable(hsctosql
   main.cpp
   database.h database.cpp
+
+  # misc
+  misc/utilities.h
+  misc/utilities.cpp
 )
 
 target_link_libraries(hsctosql Qt${QT_VERSION_MAJOR}::Core)
 target_link_libraries(hsctosql Qt${QT_VERSION_MAJOR}::Xml)
 target_link_libraries(hsctosql Qt${QT_VERSION_MAJOR}::Sql)
+
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+	target_link_libraries(hsctosql Qt6::Core5Compat)
+endif()
+
+target_include_directories(${PROJECT_NAME}
+	PRIVATE ${CMAKE_SOURCE_DIR}/misc
+)
