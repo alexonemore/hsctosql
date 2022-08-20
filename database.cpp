@@ -1230,7 +1230,7 @@ QSqlQuery MakeTable(const QSqlDatabase& sql, const QString& str0,
 
 void SqlTransaction(QSqlQuery&& query, const QVector<QString>& vecstr)
 {
-	if(!query.exec("BEGIN TRANSACTION")) {
+	if(!query.exec(QStringLiteral("BEGIN TRANSACTION"))) {
 		auto s = query.lastError().text();
 		throw std::exception(s.toStdString().c_str());
 	}
@@ -1240,7 +1240,7 @@ void SqlTransaction(QSqlQuery&& query, const QVector<QString>& vecstr)
 			throw std::exception(s.toStdString().c_str());
 		}
 	}
-	if(!query.exec("END TRANSACTION")) {
+	if(!query.exec(QStringLiteral("END TRANSACTION"))) {
 		auto s = query.lastError().text();
 		throw std::exception(s.toStdString().c_str());
 	}
