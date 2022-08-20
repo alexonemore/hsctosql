@@ -1182,6 +1182,7 @@ void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db,
 			auto split = temp_range.Reference.split(";");
 			for(const auto& item : split) {
 				auto Name = item.simplified();
+				Name.replace("'", "''");
 				auto str = str2.arg(QString::number(trref_id++),
 									QString::number(tr_id),
 									Name);
