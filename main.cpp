@@ -38,11 +38,11 @@ int main() try
 {
 	QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
-	Elements dbel("../hsc_elements.txt");
-	DataReferences dbref("../hsc_data_references.txt");
-	Database db("../hsc_database.xml");
-	Colors dbcolor("../hsc_color_codes.txt");
-	Units dbunit("../hsc_units.txt");
+	Elements dbel("../hsctosql/dbsources/hsc_elements.txt");
+	DataReferences dbref("../hsctosql/dbsources/hsc_data_references.txt");
+	Database db("../hsctosql/dbsources/hsc_database.xml");
+	Colors dbcolor("../hsctosql/dbsources/hsc_color_codes.txt");
+	Units dbunit("../hsctosql/dbsources/hsc_units.txt");
 
 	CheckSuEqualNonSu(db);
 	CheckUnits(db);

@@ -1,0 +1,51 @@
+PropertyShortName	PropertyFullName	Units
+AtomicNumber	Atomic Number	
+Symbol	Symbol	
+Name	Name	
+AtomicWeight	Atomic Weight	g/mol
+OxidationStatesMostStable	Oxidation States, Most Stable	
+OxidationStates	Oxidation States	
+Density	Density	g/ml
+ElectronConfiguration	Electron Configuration	
+MeltingPoint	Melting Point	K
+MeltingPointPressure	Melting Point Pressure	atm
+BoilingPoint	Boiling Point	K
+Electronegativity	Electronegativity	
+HeatOfVaporization	Heat of Vaporization	kJ/mol
+HeatOfFusion	Heat of Fusion	kJ/mol
+ElectricalConductivity	Electrical Conductivity	E6/(ohm*cm)
+ThermalConductivity	Thermal Conductivity	W/(cm*K)
+SpecificHeatCapacity	Specific Heat Capacity	J/(g*K)
+FirstIonizationPotential	First Ionization Potential	V
+AtomicVolume	Atomic Volume	ml/mol
+AtomicRadius	Atomic Radius	Angstrom
+CovalentRadius	Covalent Radius	Angstrom
+CrystalStructure	Crystal Structure 	
+AcidBaseProperties	Acid-Base Properties	
+YearWhenDiscovered	Year when discovered	
+Color	Color	
+ColorRGBNumber	Color RGB-number	RGB
+SolubilityInColdWater	Solubility in Cold water	g/100ml
+SolubilityInHotWater	Solubility in Hot Water	g/100ml
+MagneticSusceptibility	Magnetic Susceptibility	E-6cgs
+AtomicElectronAffinity	Atomic Electron Affinity	eV
+IonicRadiiInCrystalsOxidationState	Ionic Radii in Crystals (Oxidation state)	Angstrom
+LatticeParameterA	Lattice parameter a	nm
+LatticeParameterB	Lattice parameter b	nm
+LatticeParameterC	Lattice parameter c	nm
+ContentInTheEarthsCrust	Content in the Earth's Crust	mg/kg
+ContentInTheSea	Content in the Sea	mg/l
+ContentInTheAir	Content in the Air	vol-%
+Polarizability	Polarizability	E-24 cm3
+EnthalpyOfFormationAt29815KGas	Enthalpy of Formation at 298.15 K Gas	kJ/mol
+EnthalpyOfFormationAt29815KSolid	Enthalpy of Formation at 298.15 K Solid	kJ/mol
+GibbsEnergyOfFormation29815KGas	Gibbs Energy of Formation  298.15 K Gas	kJ/mol
+GibbsEnergyOfFormation29815KSolid	Gibbs Energy of Formation  298.15 K Solid	kJ/mol
+StandardEntropy29815KGas	Standard Entropy 298.15 K Gas	J/(mol*K)
+StandardEntropy29815KSolid	Standard Entropy 298.15 K Solid	J/(mol*K)
+HeatCapacity29815KGas	Heat Capacity 298.15 K Gas	J/(mol*K)
+HeatCapacity29815KSolid	Heat Capacity 298.15 K Solid	J/(mol*K)
+LinearExpansion29815K	Linear Expansion 298.15 K	E6/K
+HalfLifeOfTheMostStabileNuclide	Half-Life of the most stabile nuclide	
+Isotopes	Isotopes, Atomic number, Relative atomic weight, Half life	-, g/mol, 
+RecyclabilityUNEP	Recyclability (UNEP)	%

@@ -179,7 +179,7 @@ class Units final
 {
 	struct Unit {
 		int id;
-		QString name, unit_name;
+		QString PropertyShortName, PropertyFullName, UnitName;
 	};
 	QVector<Unit> data;
 public:
@@ -198,17 +198,23 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 			   const Elements& dbel, const Colors& dbcolor,
 			   const Units& dbunit, const QString& filename);
 
-QSqlQuery MakeTable(const QSqlDatabase& sql, const QString& str0, const QString& str1);
-void MakeTableSpecies(const QSqlDatabase& sql, const Database& db, const Elements& dbel);
+QSqlQuery MakeTable(const QSqlDatabase& sql, const QString& str0,
+					const QString& str1);
+void MakeTableSpecies(const QSqlDatabase& sql, const Database& db,
+					  const Elements& dbel);
 void MakeTableTempRange(const QSqlDatabase& sql, const Database& db);
 void MakeTableColor(const QSqlDatabase& sql, const Colors& dbcolor);
-void MakeTableCompositionsOfSpecies(const QSqlDatabase& sql, const Database& db, const Elements& dbel);
+void MakeTableCompositionsOfSpecies(const QSqlDatabase& sql, const Database& db,
+									const Elements& dbel);
 void MakeTableElements(const QSqlDatabase& sql, const Elements& dbel);
-void MakeTableIonicRadiiInCrystalsOxidationState(const QSqlDatabase& sql, const Elements& dbel);
+void MakeTableIonicRadiiInCrystalsOxidationState(const QSqlDatabase& sql,
+												 const Elements& dbel);
 void MakeTableIsotopes(const QSqlDatabase& sql, const Elements& dbel);
 void MakeTableState(const QSqlDatabase& sql);
 void MakeTableRefs(const QSqlDatabase& sql, const DataReferences& dbref);
-void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db, const DataReferences& dbref);
+void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db,
+									const DataReferences& dbref);
+void MakeTableUnits(const QSqlDatabase& sql, const Units& dbunit);
 QString FilenameIncrement(const QString& filename, int precision = 3);
 void SqlTransaction(QSqlQuery&& query, const QVector<QString>& vecstr);
 

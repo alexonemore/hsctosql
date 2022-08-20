@@ -592,9 +592,12 @@ Units::Units(const QString& filename)
 		int id{1};
 		while(!stream.atEnd()) {
 			auto str = stream.readLine().split("\t");
-			auto name = str.at(0).simplified();
-			auto unit_name = str.at(1).simplified();
-			data.push_back(Unit{id++, name, unit_name});
+			auto PropertyShortName = str.at(0).simplified();
+			if(PropertyShortName == "PropertyShortName") continue;
+			auto PropertyFullName = str.at(1).simplified();
+			auto UnitName = str.at(2).simplified();
+			data.push_back(Unit{id++, PropertyShortName, PropertyFullName,
+						   UnitName});
 		}
 		if(stream.status() != QTextStream::Ok) {
 			QString err("ERROR read file: ");
@@ -634,6 +637,7 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 	MakeTableState(sql);
 	MakeTableRefs(sql, dbref);
 	MakeTableTempRangeToReferences(sql, db, dbref);
+	MakeTableUnits(sql, dbunit);
 	sql.close();
 }
 
@@ -1181,6 +1185,30 @@ void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db,
 	SqlTransaction(MakeTable(sql, str0, str1), vecstr);
 }
 
+void MakeTableUnits(const QSqlDatabase& sql, const Units& dbunit)
+{
+	static QString str0("DROP TABLE IF EXISTS Units;");
+	static QString str1("CREATE TABLE IF NOT EXISTS Units ( "
+						"unit_id              INTEGER PRIMARY KEY NOT NULL, "
+						"PropertyShortName    TEXT NOT NULL, "
+						"PropertyFullName     TEXT NOT NULL, "
+						"UnitName             TEXT NOT NULL);");
+	static QString str2("INSERT INTO Units (unit_id, PropertyShortName, "
+						"PropertyFullName, UnitName) "
+						"VALUES (%1, '%2', '%3', '%4');");
+	QVector<QString> vecstr;
+	for(const auto& i : dbunit) {
+		auto fullname = i.PropertyFullName;
+		fullname.replace("'", "''");
+		auto str = str2.arg(QString::number(i.id),
+							i.PropertyShortName,
+							fullname,
+							i.UnitName);
+		vecstr.push_back(str);
+	}
+	SqlTransaction(MakeTable(sql, str0, str1), vecstr);
+}
+
 QSqlQuery MakeTable(const QSqlDatabase& sql, const QString& str0,
 					const QString& str1)
 {
@@ -1217,3 +1245,4 @@ void SqlTransaction(QSqlQuery&& query, const QVector<QString>& vecstr)
 		throw std::exception(s.toStdString().c_str());
 	}
 }
+
