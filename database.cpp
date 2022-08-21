@@ -43,7 +43,7 @@ Database::Database(const QString& filename)
 				str += sr.name();
 				str += QStringLiteral(" ");
 				str += sr.text();
-				throw std::exception(str.toStdString().c_str());
+				throw std::runtime_error(str.toStdString().c_str());
 			}
 		};
 		bool in_temp_range{false};
@@ -113,7 +113,7 @@ Database::Database(const QString& filename)
 		if(sr.hasError()) {
 			QString str("ERROR QXmlStreamReader: ");
 			str += sr.errorString();
-			throw std::exception(str.toStdString().c_str());
+			throw std::runtime_error(str.toStdString().c_str());
 		}
 		file.close();
 	}
@@ -245,7 +245,7 @@ bool contain_nested_brackets(const std::string& text)
 	if(max > 2) {
 		std::string t("Depth of nested brackets more than 2 in: ");
 		t.append(text);
-		throw std::exception(t.c_str());
+		throw std::runtime_error(t.c_str());
 	}
 	if(max == 2) return true;
 	else return false;
@@ -288,7 +288,7 @@ void ParseFormula(const QString& formula, QString& suffix,
 		if(contain_nested_brackets(text)) {
 			// (Co(NH3)6)Br3, (Co(NH3)5Cl)Cl2, K2Sr(B4O5(OH)4)2
 			std::smatch m;
-			if(!std::regex_match(text, m, nested_brackets)) throw std::exception("Error in regex match in nested brackets");
+			if(!std::regex_match(text, m, nested_brackets)) throw std::runtime_error("Error in regex match in nested brackets");
 			//auto&& m0 = m[0];		// K2Sr(B4O5(OH)4)2Mo4
 			auto&& m1 = m[1].str(); // K2Sr
 			//auto&& m2 = m[2];		// (B4O5(OH)4)2
@@ -307,7 +307,7 @@ void ParseFormula(const QString& formula, QString& suffix,
 			}
 		} else {
 			if(QString(text.c_str()).contains('\'')) {
-				throw std::exception("contains \'");
+				throw std::runtime_error("contains \'");
 			}
 			ParseFormulaWithoutNestedBrackets(composition, text, amount1);
 		}
@@ -348,7 +348,7 @@ void tests()
 			contain_nested_brackets("K2Sr(B4O5(OH)4)2"))
 	{
 	} else {
-		throw std::exception("ERROR tests_contain_nested_brackets failed");
+		throw std::runtime_error("ERROR tests_contain_nested_brackets failed");
 	}
 	struct Test{
 		QString formula;
@@ -377,11 +377,11 @@ void tests()
 		if(i.suffix != suffix_test) {
 			QString str("ERROR fail in suffix: ");
 			str += i.formula + " " + i.suffix + " " + suffix_test;
-			throw std::exception(str.toStdString().c_str());
+			throw std::runtime_error(str.toStdString().c_str());
 		} else if(i.composition != cmp_test) {
 			QString str("ERROR fail in composition: ");
 			str += i.formula;
-			throw std::exception(str.toStdString().c_str());
+			throw std::runtime_error(str.toStdString().c_str());
 		} else {
 #ifndef NDEBUG
 			std::cout << i.formula.toStdString() << " parse formula test passed\n";
@@ -404,7 +404,7 @@ DataReferences::DataReferences(const QString& filename)
 		if(stream.status() != QTextStream::Ok) {
 			QString err("ERROR read file: ");
 			err += filename;
-			throw std::exception(err.toStdString().c_str());
+			throw std::runtime_error(err.toStdString().c_str());
 		}
 	}
 	file.close();
@@ -472,22 +472,22 @@ Elements::Elements(const QString& filename)
 		if(stream.status() != QTextStream::Ok) {
 			QString err("ERROR read file: ");
 			err += filename;
-			throw std::exception(err.toStdString().c_str());
+			throw std::runtime_error(err.toStdString().c_str());
 		}
 	}
 	file.close();
 
 	// make atomic_weight
 	if(properties.at(1) != "Symbol") {
-		throw std::exception("Symbol is not in col 1");
+		throw std::runtime_error("Symbol is not in col 1");
 	}
 	if(properties.at(3) != "Atomic Weight") {
-		throw std::exception("Atomic Weight is not in col 3");
+		throw std::runtime_error("Atomic Weight is not in col 3");
 	}
 	bool ok{false};
 	for(auto&& i : values) {
 		atomic_weight[i.at(1)] = i.at(3).toDouble(&ok);
-		if(!ok) throw std::exception(i.at(2).toStdString().c_str());
+		if(!ok) throw std::runtime_error(i.at(2).toStdString().c_str());
 	}
 
 	// make element_id
@@ -571,7 +571,7 @@ Colors::Colors(const QString& filename)
 		if(stream.status() != QTextStream::Ok) {
 			QString err("ERROR read file: ");
 			err += filename;
-			throw std::exception(err.toStdString().c_str());
+			throw std::runtime_error(err.toStdString().c_str());
 		}
 	}
 }
@@ -602,7 +602,7 @@ Units::Units(const QString& filename)
 		if(stream.status() != QTextStream::Ok) {
 			QString err("ERROR read file: ");
 			err += filename;
-			throw std::exception(err.toStdString().c_str());
+			throw std::runtime_error(err.toStdString().c_str());
 		}
 	}
 }
@@ -625,7 +625,7 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 	if(!sql.open()) {
 		QString str("Cannot open Database file: ");
 		str += new_filename + "\n" + sql.lastError().text();
-		throw std::exception(str.toStdString().c_str());
+		throw std::runtime_error(str.toStdString().c_str());
 	}
 	MakeTableSpecies(sql, db, dbel);
 	MakeTableTempRange(sql, db);
@@ -716,14 +716,14 @@ void MakeTableSpecies(const QSqlDatabase& sql, const Database& db,
 		int imin{0}, imax{0}, icur{0};
 		bool ok{false};
 		double min = tr.at(0).HSCT1.toDouble(&ok);
-		if(!ok) throw std::exception(tr.at(0).HSCT1.toStdString().c_str());
+		if(!ok) throw std::runtime_error(tr.at(0).HSCT1.toStdString().c_str());
 		double max = tr.at(0).HSCT2.toDouble(&ok);
-		if(!ok) throw std::exception(tr.at(0).HSCT2.toStdString().c_str());
+		if(!ok) throw std::runtime_error(tr.at(0).HSCT2.toStdString().c_str());
 		for(const auto& i : tr) {
 			auto xmin = i.HSCT1.toDouble(&ok);
-			if(!ok) throw std::exception(i.HSCT1.toStdString().c_str());
+			if(!ok) throw std::runtime_error(i.HSCT1.toStdString().c_str());
 			auto xmax = i.HSCT2.toDouble(&ok);
-			if(!ok) throw std::exception(i.HSCT2.toStdString().c_str());
+			if(!ok) throw std::runtime_error(i.HSCT2.toStdString().c_str());
 			if(xmin < min) {
 				min = xmin;
 				imin = icur;
@@ -1217,13 +1217,13 @@ QSqlQuery MakeTable(const QSqlDatabase& sql, const QString& str0,
 		QString err("Unable to drop table\n");
 		err += str0 + "\n";
 		err += query.lastError().text();
-		throw std::exception(err.toStdString().c_str());
+		throw std::runtime_error(err.toStdString().c_str());
 	}
 	if(!query.exec(str1)) {
 		QString err("Unable to create table\n");
 		err += str1 + "\n";
 		err += query.lastError().text();
-		throw std::exception(err.toStdString().c_str());
+		throw std::runtime_error(err.toStdString().c_str());
 	}
 	return query;
 }
@@ -1232,17 +1232,17 @@ void SqlTransaction(QSqlQuery&& query, const QVector<QString>& vecstr)
 {
 	if(!query.exec(QStringLiteral("BEGIN TRANSACTION"))) {
 		auto s = query.lastError().text();
-		throw std::exception(s.toStdString().c_str());
+		throw std::runtime_error(s.toStdString().c_str());
 	}
 	for(const auto& str : vecstr) {
 		if(!query.exec(str)) {
 			auto s = str + QStringLiteral("\n") + query.lastError().text();
-			throw std::exception(s.toStdString().c_str());
+			throw std::runtime_error(s.toStdString().c_str());
 		}
 	}
 	if(!query.exec(QStringLiteral("END TRANSACTION"))) {
 		auto s = query.lastError().text();
-		throw std::exception(s.toStdString().c_str());
+		throw std::runtime_error(s.toStdString().c_str());
 	}
 }
 

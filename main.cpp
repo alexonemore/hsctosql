@@ -106,20 +106,20 @@ void CheckSuEqualNonSu(const Database& db)
 	for(const auto& i : db) {
 		if(i.suHSCMP != i.HSCMP) {
 			std::cout << "MP: " << i.formula.toStdString() << std::endl;
-			throw std::exception("suHSCMP");
+			throw std::runtime_error("suHSCMP");
 		}
 		if(i.suHSCBP != i.HSCBP) {
 			std::cout << "BP: " << i.formula.toStdString() << std::endl;
-			throw std::exception("suHSCBP");
+			throw std::runtime_error("suHSCBP");
 		}
 		for(const auto& temprange : i.TempRange) {
 			if(temprange.suHSCT1 != temprange.HSCT1) {
 				std::cout << "suHSCT1: " << i.formula.toStdString() << std::endl;
-				throw std::exception("suHSCT1");
+				throw std::runtime_error("suHSCT1");
 			}
 			if(temprange.suHSCT2 != temprange.HSCT2) {
 				std::cout << "suHSCT2: " << i.formula.toStdString() << std::endl;
-				throw std::exception("suHSCT2");
+				throw std::runtime_error("suHSCT2");
 			}
 		}
 	}
@@ -134,24 +134,24 @@ void CheckUnits(const Database& db)
 		if(i.Unit != joules) {
 			std::cout << "Species Units: " << i.Unit.toStdString()
 					  << " in " << i.formula.toStdString() << std::endl;
-			throw std::exception("SpeciesUnits");
+			throw std::runtime_error("SpeciesUnits");
 		}
 		if(i.TemperatureUnit != kelvin) {
 			std::cout << "Species TemperatureUnit: " << i.Unit.toStdString()
 					  << " in " << i.formula.toStdString() << std::endl;
-			throw std::exception("SpeciesTemperatureUnit");
+			throw std::runtime_error("SpeciesTemperatureUnit");
 		}
 		for(const auto& temprange : i.TempRange) {
 			if(temprange.Unit != joules) {
 				std::cout << "TempRange Units: " << temprange.Unit.toStdString()
 						  << " in " << i.formula.toStdString() << std::endl;
-				throw std::exception("TempRangeUnits");
+				throw std::runtime_error("TempRangeUnits");
 			}
 			if(temprange.TemperatureUnit != kelvin) {
 				std::cout << "TempRange TemperatureUnit: "
 						  << temprange.TemperatureUnit.toStdString()
 						  << " in " << i.formula.toStdString() << std::endl;
-				throw std::exception("TempRangeTemperatureUnit");
+				throw std::runtime_error("TempRangeTemperatureUnit");
 			}
 		}
 	}
