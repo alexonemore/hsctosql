@@ -636,7 +636,7 @@ void SaveToSql(const Database& db, const DataReferences& dbref,
 	MakeTableIsotopes(sql, dbel);
 	MakeTableState(sql);
 	MakeTableRefs(sql, dbref);
-	MakeTableTempRangeToReferences(sql, db, dbref);
+	MakeTableTempRangeToReferences(sql, db);
 	MakeTableUnits(sql, dbunit);
 	sql.close();
 }
@@ -1153,8 +1153,7 @@ void MakeTableRefs(const QSqlDatabase& sql, const DataReferences& dbref)
 	SqlTransaction(MakeTable(sql, str0, str1), vecstr);
 }
 
-void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db,
-									const DataReferences& dbref)
+void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db)
 {
 	static QString str0("DROP TABLE IF EXISTS TempRangeToReferences;");
 	static QString str1("CREATE TABLE IF NOT EXISTS TempRangeToReferences ( "

@@ -212,8 +212,8 @@ void MakeTableIonicRadiiInCrystalsOxidationState(const QSqlDatabase& sql,
 void MakeTableIsotopes(const QSqlDatabase& sql, const Elements& dbel);
 void MakeTableState(const QSqlDatabase& sql);
 void MakeTableRefs(const QSqlDatabase& sql, const DataReferences& dbref);
-void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db,
-									const DataReferences& dbref);
+void MakeTableTempRangeToReferences(const QSqlDatabase& sql,
+									const Database& db);
 void MakeTableUnits(const QSqlDatabase& sql, const Units& dbunit);
 QString FilenameIncrement(const QString& filename, int precision = 3);
 void SqlTransaction(QSqlQuery&& query, const QVector<QString>& vecstr);
