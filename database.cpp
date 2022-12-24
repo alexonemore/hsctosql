@@ -383,9 +383,7 @@ void tests()
 			str += i.formula;
 			throw std::runtime_error(str.toStdString().c_str());
 		} else {
-#ifndef NDEBUG
 			std::cout << i.formula.toStdString() << " parse formula test passed\n";
-#endif
 		}
 	}
 }
@@ -1179,7 +1177,7 @@ void MakeTableTempRangeToReferences(const QSqlDatabase& sql, const Database& db)
 				vecstr.push_back(str);
 			}
 			tr_id++;
-		}		
+		}
 	}
 	SqlTransaction(MakeTable(sql, str0, str1), vecstr);
 }

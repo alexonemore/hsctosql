@@ -49,7 +49,7 @@ int main() try
 
 	SaveToSql(db, dbref, dbel, dbcolor, dbunit, "../hsc_database.db");
 
-#if 0
+#if 1
 	dbel.PrintProperties();
 	dbel.PrintPropertyUnits();
 	PrintPhases(db);
