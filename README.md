@@ -8,12 +8,12 @@ To convert, you will need the databases from the HSC program that are not suppli
 
 1. Download Qt Online Installer from the official website. If you can't download Qt due to internet restrictions, use a VPN or switch to a Linux operating system like Manjaro
 2. Install Qt 5.15.2 or Qt 6.4.1
-3. Download hsctosql source code using git
+3. Download hsctosql source code using git (install git if you don't have it yet)
 	```shell
 	git clone git@github.com:alexonemore/hsctosql.git
 	```
 4. Prepare your own database files from the HSC program as described below in hsctosql/dbsources directory
-5. Open CMakeFile.txt in QtCreator
+5. Open CMakeLists.txt in QtCreator
 6. Build in Release mode. Do not use Debug mode, as it is extremely slow and consumes too much memory
 7. Run it and you get the QSlite database file in one directory above
 
