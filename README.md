@@ -6,7 +6,7 @@ To convert, you will need the databases from the HSC program that are not suppli
 
 ## The easiest way to compile and run
 
-1. Download Qt Online Installer from the official website. If you can't download Qt due to internet restrictions, use a VPN or switch to a Linux operating system like Manjaro
+1. Download Qt Online Installer from the official website. If you can't download Qt due to internet restrictions, use a VPN or switch to a Linux operating system like Manjaro and install it from the repositories
 2. Install Qt 5.15.2 or Qt 6.4.1
 3. Download hsctosql source code using git (install git if you don't have it yet)
 	```shell
