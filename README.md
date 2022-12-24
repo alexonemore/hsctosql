@@ -1,4 +1,21 @@
-# HSC database to SQL (sqlite)
+# hsctosql (HSC database to SQLite)
+
+This is an auxiliary program for converting a database from HSC XML format to SQLite format. 
+This program was successfully built using QtCreator with the Qt 5.15.2 and 6.4.1 libraries by the MSVC and MinGW compilers.
+To convert, you will need the databases from the HSC program that are not supplied with this program to avoid licensing problems.
+
+## The easiest way to compile and run
+
+1. Download Qt Online Installer from the official website. If you can't download Qt due to internet restrictions, use a VPN or switch to a Linux operating system like Manjaro
+2. Install Qt 5.15.2 or Qt 6.4.1
+3. Download hsctosql source code using git
+	```shell
+	git clone git@github.com:alexonemore/hsctosql.git
+	```
+4. Prepare your own database files from the HSC program as described below in hsctosql/dbsources directory
+5. Open CMakeFile.txt in QtCreator
+6. Build in Release mode. Do not use Debug mode, as it is extremely slow and consumes too much memory
+7. Run it and you get the QSlite database file in one directory above
 
 ## Data references
 
@@ -38,4 +55,9 @@ D	1	D	Deuterium	2.01410177811
 T	1	T	Tritium	3.01604928																																																									
 
 ```
+
+## License
+
+hsctosql is licensed under the GNU General Public License Version 3.
+Modification or redistribution is permitted under the conditions of these license.
 
