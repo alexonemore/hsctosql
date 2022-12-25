@@ -19,10 +19,18 @@ To convert, you will need the databases from the HSC program that are not suppli
 
 ## Database files required for the program
 
-1. __Data references__
+1. __Main database__
 
 	```
-	1. Open "C:\HSC9\Help\32 Data References.pdf" in MsWord
+	1. Open the HSC-Database module
+	2. Copy All the Data from Main Database to your Own Database
+	3. Save your own database as "hsc_database.xml"
+	```
+
+2. __Data references__
+
+	```
+	1. Open the "C:\HSC9\Help\32 Data References.pdf" file in MsWord
 	2. Remove the header, footer, and text above the table
 	3. Select All and Clear All Formatting
 	4. Replace All ^t with a space
@@ -37,37 +45,44 @@ To convert, you will need the databases from the HSC program that are not suppli
 	13. Save as "hsc_data_references.txt"
 	```
 
-2. __Main database__
-
-	```
-	1. Save as "../hsc_database.xml"
-	```
-
 3. __Elements__
 
 	```
-	1. Open elements.xlsx in Ms Excel
-	2. Ctrl-a -> in new document Special Paste -> Values
-	3. Ctrl-a -> in new list Special Paste -> Transpose
-	4. Ctrl-a -> paste in Notepad++
-	5. Delete last line with Reference
-	6. Save as "../hsc_elements.txt"
-	7. Add D and T (tab characters seem to be required):
+	1. Open the HSC-Elements module
+	2. Open Database
+	3. Save the Table as elements.xlsx
+	4. Open elements.xlsx in MsExcel
+	5. Ctrl-a, Ctrl-c -> in the new Excel document Paste Special... -> Values
+	6. Ctrl-a, Ctrl-c -> in the new list Paste -> Transpose
+	7. Ctrl-a, Ctrl-c -> Paste in Notepad++
+	8. Delete the last line with Reference
+	9. Add to the end D and T (tab characters seem to be required):
 	D	1	D	Deuterium	2.01410177811																																																									
 	T	1	T	Tritium	3.01604928																																																									
+	10. Save as "hsc_elements.txt"
 
 	```
 
-4. __4__
+4. __Color Codes__
 
 	```
-	1. TODO
+	1. Open the "C:\HSC9\Help\28 HSC - Databases.pdf" file
+	2. Copy the Color codes to Notepad++
+	3. Save as "hsc_color_codes.txt"
 	```
 
-5. __5__
+5. __Units__
 
 	```
-	1. TODO
+	1. Open the elements.xlsx file saved in step 3
+	2. Select the Columns A an B, Ctrl-c -> in the new Excel document Paste Special... -> Values
+	3. Insert the Column before Column A
+	4. Copy from Column B or Type short names in the Column A
+	5. Rename the columns in the first line to
+		 |        A        |       B        |  C  |
+		1|PropertyShortName|PropertyFullName|Units|
+	6. Delete empty or duplicate lines
+	7. Save as "hsc_units.txt"
 	```
 
 ## License
