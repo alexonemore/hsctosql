@@ -1,4 +1,4 @@
-# __hsctosql__ (HSC to SQLite database converter)
+# __HSCtoSQL__ (HSC to SQLite database converter)
 
 This is an auxiliary program for converting a database from HSC XML format to SQLite format. 
 This program was successfully built using QtCreator with the Qt 5.15.2 and 6.4.1 libraries by the MSVC and MinGW compilers.
@@ -8,7 +8,7 @@ To convert, you will need the databases from the HSC program that are not suppli
 
 1. Download Qt Online Installer from the official website. If you can't download Qt due to internet restrictions, use a VPN or switch to a Linux operating system like Manjaro and install it from the repositories.
 2. Install Qt 5.15.2 or Qt 6.4.1.
-3. Download __hsctosql__ source code using git (install git if you don't have it yet).
+3. Download __HSCtoSQL__ source code using git (install git if you don't have it yet).
 	```shell
 	git clone git@github.com:alexonemore/hsctosql.git
 	```
@@ -71,6 +71,6 @@ To convert, you will need the databases from the HSC program that are not suppli
 
 ## License
 
-__hsctosql__ is licensed under the GNU General Public License Version 3.
+__HSCtoSQL__ is licensed under the GNU General Public License Version 3.
 Modification or redistribution is permitted under the conditions of these license.
 
