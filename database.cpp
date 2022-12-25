@@ -395,9 +395,12 @@ DataReferences::DataReferences(const QString& filename)
 		QTextStream stream(&file);
 		int i{1};
 		while(!stream.atEnd()) {
-			auto str = stream.readLine().split("\t");
-			data.push_back(DataReferencesItem{i++, str.at(0).simplified(),
-											  str.at(1).simplified()});
+			auto&& str = stream.readLine().split("\t");
+			auto&& short_name = str.at(0).simplified();
+			if(short_name.isEmpty()) continue;
+			auto&& full_name = str.at(1).simplified();
+			data.push_back(DataReferencesItem{i++, std::move(short_name),
+											  std::move(full_name)});
 		}
 		if(stream.status() != QTextStream::Ok) {
 			QString err("ERROR read file: ");
