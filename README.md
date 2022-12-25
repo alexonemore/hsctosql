@@ -1,6 +1,6 @@
 # __HSCtoSQL__ (HSC to SQLite database converter)
 
-This is an auxiliary program for converting a database from HSC XML format to SQLite format. 
+__HSCtoSQL__ is an auxiliary program for converting a database from HSC XML format to SQLite format. 
 This program was successfully built using QtCreator with the Qt 5.15.2 and 6.4.1 libraries by the MSVC and MinGW compilers.
 To convert, you will need the databases from the HSC program that are not supplied with this program to avoid licensing problems.
 
