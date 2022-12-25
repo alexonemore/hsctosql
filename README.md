@@ -8,7 +8,7 @@ To convert, you will need the databases from the HSC program that are not suppli
 
 1. Download Qt Online Installer from the official website. If you can't download Qt due to internet restrictions, use a VPN or switch to a Linux operating system like Manjaro and install it from the repositories.
 2. Install Qt 5.15.2 or Qt 6.4.1.
-3. Download __HSCtoSQL__ source code using git (install git if you don't have it yet).
+3. Download __HSCtoSQL__ source code using git (install Git if you don't have it yet).
 	```shell
 	git clone git@github.com:alexonemore/hsctosql.git
 	```
@@ -22,18 +22,19 @@ To convert, you will need the databases from the HSC program that are not suppli
 1. __Data references__
 
 	```
-	1. Open "32 Data References.pdf" in Ms Word
-	2. Replace \t -> space
-	3. Replace \n -> space
-	4. Replace spacespace -> space
-	5. Delete colontituls and text on top
-	6. Clear format (F6)
-	7. Copy all -> paste in Notepad++
-	8. Replace \t" -> \t
-	9. Replace "\n -> \n
-	10. Replace \n\n -> \n
-	11. Delete first empty line
-	12. Save as "../hsc_data_references.txt"
+	1. Open "C:\HSC9\Help\32 Data References.pdf" in MsWord
+	2. Remove the header, footer, and text above the table
+	3. Select All and Clear All Formatting
+	4. Replace All ^t with a space
+	5. Replace All ^p with a space
+	6. Replace spacespace with a space recursively
+	7. Select All, Copy and Paste it in Notepad++
+	8. Replace \t" with \t (Extended mode)
+	9. Replace "\n with \n  (Extended mode)
+	10. Replace \n\n with \n  (Extended mode)
+	11. Delete the first empty line if it exists
+	12. Delete all characters in the last line, including spaces
+	13. Save as "hsc_data_references.txt"
 	```
 
 2. __Main database__
