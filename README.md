@@ -24,7 +24,7 @@ To convert, you will need the databases from the HSC program that are not suppli
 	```
 	1. Open the HSC-Database module
 	2. Copy All the Data from Main Database to your Own Database
-	3. Save your own database as "hsc_database.xml"
+	3. Save your own database as "dbsources/hsc_database.xml"
 	```
 
 2. __Data references__
@@ -42,7 +42,7 @@ To convert, you will need the databases from the HSC program that are not suppli
 	10. Replace \n\n with \n  (Extended mode)
 	11. Delete the first empty line if it exists
 	12. Delete all characters in the last line, including spaces
-	13. Save as "hsc_data_references.txt"
+	13. Save as "dbsources/hsc_data_references.txt"
 	```
 
 3. __Elements__
@@ -59,8 +59,7 @@ To convert, you will need the databases from the HSC program that are not suppli
 	9. Add to the end D and T (tab characters seem to be required):
 	D	1	D	Deuterium	2.01410177811																																																									
 	T	1	T	Tritium	3.01604928																																																									
-	10. Save as "hsc_elements.txt"
-
+	10. Save as "dbsources/hsc_elements.txt"
 	```
 
 4. __Color Codes__
@@ -68,7 +67,7 @@ To convert, you will need the databases from the HSC program that are not suppli
 	```
 	1. Open the "C:\HSC9\Help\28 HSC - Databases.pdf" file
 	2. Copy the Color codes to Notepad++
-	3. Save as "hsc_color_codes.txt"
+	3. Save as "dbsources/hsc_color_codes.txt"
 	```
 
 5. __Units__
@@ -82,11 +81,10 @@ To convert, you will need the databases from the HSC program that are not suppli
 		 |        A        |       B        |  C  |
 		1|PropertyShortName|PropertyFullName|Units|
 	6. Delete empty or duplicate lines
-	7. Save as "hsc_units.txt"
+	7. Save as "dbsources/hsc_units.txt"
 	```
 
 ## License
 
 __HSCtoSQL__ is licensed under the GNU General Public License Version 3.
 Modification or redistribution is permitted under the conditions of these license.
-
