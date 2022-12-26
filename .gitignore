@@ -1,10 +1,10 @@
 # Databases
-# dbsources/hsc_data_references.txt
-# dbsources/hsc_database.xml
-# dbsources/hsc_units.txt
-# dbsources/hsc_elements.txt
-# dbsources/hsc_color_codes.txt
-# db_structure.xlsx
+dbsources/hsc_data_references.txt
+dbsources/hsc_database.xml
+dbsources/hsc_units.txt
+dbsources/hsc_elements.txt
+dbsources/hsc_color_codes.txt
+db_structure.xlsx
 
 # Visual Studio files
 .vs/
