@@ -12,7 +12,7 @@ To convert, you will need the databases from the HSC program that are not suppli
 	```shell
 	git clone git@github.com:alexonemore/hsctosql.git
 	```
-4. Prepare your own 5 database files from the HSC program as described below and put them in `hsctosql/dbsources` directory.
+4. Prepare your own 5 files from the HSC program as described below and put them in `hsctosql/dbsources` directory.
 5. Open `CMakeLists.txt` in QtCreator.
 6. Build in __Release__ mode. Do not build in Debug mode. A program built in Debug mode is extremely slow.
 7. Run it and you get the QSlite database file in one directory above.
